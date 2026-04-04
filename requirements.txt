@@ -1,0 +1,15 @@
+fastapi
+uvicorn
+streamlit
+streamlit-plotly-events
+requests
+plotly
+pandas
+openpyxl
+pdfplumber
+sqlalchemy
+python-jose[cryptography]
+passlib[bcrypt]
+pydantic[email]
+psycopg[binary]
+pymysql

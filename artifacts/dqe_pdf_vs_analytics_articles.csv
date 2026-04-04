@@ -1,0 +1,197 @@
+lot_code,designation_normalized,designation_pdf,designation_db,unite_pdf,unite_db,quantite_pdf,quantite_db,total_ht_pdf,base_ht_db,ecart_base_ht,present_pdf,present_db,is_pm
+LOT 1,"ABONNEMENT, MENSUALITE CONCESSIONNAIRES","Abonnement, mensualité concessionnaires","Abonnement, mensualité concessionnaires",ENS,FORFAIT,1.0,1.0,2507000.0,2507000.0,0.0,True,True,0
+LOT 1,ACIER,Acier,Acier,KG,KG,26762.4,436.0,36932112.0,601680.0,-36330432.0,True,True,0
+LOT 1,ACIER (AMORCES POTEAUX),,Acier (Amorces poteaux),,KG,0.0,198.0,0.0,273240.0,273240.0,False,True,0
+LOT 1,ACIER (CHAINAGES RDC),,Acier (Chainages RDC),,KG,0.0,1113.6,0.0,1536768.0,1536768.0,False,True,0
+LOT 1,ACIER (DALLAGE SOL - ANNEXE),,Acier (Dallage sol - Annexe),,KG,0.0,1818.0,0.0,2508840.0,2508840.0,False,True,0
+LOT 1,ACIER (DALLAGE SOL),,Acier (Dallage sol),,KG,0.0,2324.0,0.0,3207120.0,3207120.0,False,True,0
+LOT 1,ACIER (ESCALIER RDC),,Acier (Escalier RDC),,KG,0.0,2227.2,0.0,7939968.0,7939968.0,False,True,0
+LOT 1,ACIER (LINTEAUX RDC),,Acier (Linteaux RDC),,KG,0.0,331.8,0.0,457884.0,457884.0,False,True,0
+LOT 1,ACIER (LONGRINES),,Acier (Longrines),,KG,0.0,484.0,0.0,667920.0,667920.0,False,True,0
+LOT 1,ACIER (POTEAUX RDC),,Acier (Poteaux RDC),,KG,0.0,297.6,0.0,410688.0,410688.0,False,True,0
+LOT 1,ACIER (POUTRES RDC),,Acier (Poutres RDC),,KG,0.0,483.6,0.0,667368.0,667368.0,False,True,0
+LOT 1,ACIER (VOILE ASCENSEUR),,Acier (Voile ascenseur),,KG,0.0,2628.0,0.0,3626640.0,3626640.0,False,True,0
+LOT 1,AGGLOS CREUX 20X20X50,Agglos creux 20x20x50,Agglos creux 20x20x50,M2,M2,2250.54,1.0,25172290.0,11185.0,-25161105.0,True,True,0
+LOT 1,AGGLOS PLEINS 20X20X50,Agglos pleins 20x20x50,Agglos pleins 20x20x50,M2,M2,78.98,78.98,961976.0,961976.4,0.4,True,True,0
+LOT 1,BETON,Béton,,M3,,63.5,0.0,12012613.0,0.0,-12012613.0,True,False,0
+LOT 1,BETON (DALLAGE SOL),,Béton (Dallage sol),,M3,0.0,33.2,0.0,6280610.0,6280610.0,False,True,0
+LOT 1,BETON 350,Béton 350,,M3,,190.76,0.0,36087024.0,0.0,-36087024.0,True,False,0
+LOT 1,BETON 350 (CHAINAGES RDC),,Béton 350 (Chainages RDC),,M3,0.0,5.31,0.0,1004519.25,1004519.25,False,True,0
+LOT 1,BETON 350 (ESCALIER RDC),,Béton 350 (Escalier RDC),,M3,0.0,9.28,0.0,1755544.0,1755544.0,False,True,0
+LOT 1,BETON 350 (MARCHES D'ACCES),,Béton 350 (Marches d'accès),,M3,0.0,1.0,0.0,189175.0,189175.0,False,True,0
+LOT 1,BETON 350 (POUTRES RDC),,Béton 350 (Poutres RDC),,M3,0.0,3.72,0.0,703731.0,703731.0,False,True,0
+LOT 1,BETON 350 (VOILE ASCENSEUR),,Béton 350 (Voile ascenseur),,M3,0.0,21.9,0.0,4142932.5,4142932.5,False,True,0
+LOT 1,BETON 400,Béton 400,,M3,,20.78,0.0,3931057.0,0.0,-3931057.0,True,False,0
+LOT 1,BETON 400 (LINTEAUX RDC),,Béton 400 (Linteaux RDC),,M3,0.0,4.74,0.0,896689.5,896689.5,False,True,0
+LOT 1,BETON 400 (POTEAUX RDC),,Béton 400 (Poteaux RDC),,M3,0.0,2.48,0.0,469154.0,469154.0,False,True,0
+LOT 1,BETON 400 HYDR,Béton 400 hydr,Béton 400 hydr,M3,M3,9.73,4.36,1840673.0,824803.0,-1015870.0,True,True,0
+LOT 1,BETON 400 HYDR (AMORCES POTEAUX),,Béton 400 hydr (Amorces poteaux),,M3,0.0,1.65,0.0,312138.75,312138.75,False,True,0
+LOT 1,BETON 400 HYDR (DALLAGE SOL - ANNEXE),,Béton 400 hydr (Dallage sol - Annexe),,M3,0.0,30.3,0.0,5732002.5,5732002.5,False,True,0
+LOT 1,BETON 400 HYDR (LONGRINES),,Béton 400 hydr (Longrines),,M3,0.0,3.72,0.0,703731.0,703731.0,False,True,0
+LOT 1,BETON DE PROPRETE,Béton de propreté,Béton de propreté,M3,M3,3.07,3.07,1039870.0,1039870.4,0.4,True,True,0
+LOT 1,"BUREAU DE CHANTIER, ATELIER, BARAQUEMENT ET CLOTURE PROVISOIRE","Bureau de chantier, atelier, baraquement et clôture provisoire","Bureau de chantier, atelier, baraquement et clôture provisoire",ENS,FORFAIT,1.0,1.0,3758730.0,3758730.0,0.0,True,True,0
+LOT 1,COFFRAGE,Coffrage,Coffrage,M2,M2,2174.79,15.84,12505044.0,91080.0,-12413964.0,True,True,0
+LOT 1,COFFRAGE (AMORCES POTEAUX),,Coffrage (Amorces poteaux),,M2,0.0,26.4,0.0,151800.0,151800.0,False,True,0
+LOT 1,COFFRAGE (CHAINAGES RDC),,Coffrage (Chainages RDC),,M2,0.0,79.63,0.0,457872.5,457872.5,False,True,0
+LOT 1,COFFRAGE (DALLAGE SOL - ANNEXE),,Coffrage (Dallage sol - Annexe),,M2,0.0,10.8,0.0,62100.0,62100.0,False,True,0
+LOT 1,COFFRAGE (DALLAGE SOL),,Coffrage (Dallage sol),,M2,0.0,66.8,0.0,384100.0,384100.0,False,True,0
+LOT 1,COFFRAGE (ESCALIER RDC),,Coffrage (Escalier RDC),,M2,0.0,51.33,0.0,730477.23,730477.23,False,True,0
+LOT 1,COFFRAGE (LINTEAUX RDC),,Coffrage (Linteaux RDC),,M2,0.0,71.1,0.0,408825.0,408825.0,False,True,0
+LOT 1,COFFRAGE (LONGRINES),,Coffrage (Longrines),,M2,0.0,37.33,0.0,214647.5,214647.5,False,True,0
+LOT 1,COFFRAGE (MARCHES D'ACCES),,Coffrage (Marches d'accès),,M2,0.0,1.0,0.0,5750.0,5750.0,False,True,0
+LOT 1,COFFRAGE (POTEAUX RDC),,Coffrage (Poteaux RDC),,M2,0.0,39.6,0.0,227700.0,227700.0,False,True,0
+LOT 1,COFFRAGE (POUTRES RDC),,Coffrage (Poutres RDC),,M2,0.0,46.46,0.0,267145.0,267145.0,False,True,0
+LOT 1,COFFRAGE (VOILE ASCENSEUR),,Coffrage (Voile ascenseur),,M2,0.0,101.18,0.0,581785.0,581785.0,False,True,0
+LOT 1,DECAPAGE DES CARREAUX SOL EXISTANTS EN RDC,Décapage des carreaux sol existants en RDC,Décapage des carreaux sol existants en RDC,M2,M2,460.0,460.0,0.0,2645000.0,2645000.0,True,True,1
+LOT 1,DEMOLITION DES MURS ET L'ESCALIER (ETAGE 2),Démolition des murs et l'escalier (ÉTAGE 2),Démolition des murs et l'escalier (ÉTAGE 2),FF,FORFAIT,1.0,1.0,1725000.0,1725000.0,0.0,True,True,0
+LOT 1,DEMOLITION DES MURS ET L'ESCALIER (RDC),Démolition des murs et l'escalier (RDC),Démolition des murs et l'escalier (RDC),FF,FORFAIT,1.0,1.0,1725000.0,1725000.0,0.0,True,True,0
+LOT 1,DEMOLITION DES MURS ET L'ESCALIER Y COMPRIS LA DALLE EXISTENTE BATIMENT ANNEXE (ETAGE 1),Démolition des murs et l'escalier y compris la dalle existente bâtiment annexe (ÉTAGE 1),Démolition des murs et l'escalier y compris la dalle existente bâtiment annexe (ÉTAGE 1),FF,FORFAIT,1.0,1.0,2587500.0,2587500.0,0.0,True,True,0
+LOT 1,"DIVERS (SECURITE, ASE, PANNEAU DE CHANTIER...)","Divers (sécurité, ASE, panneau de chantier…)","Divers (sécurité, ASE, panneau de chantier...)",ENS,FORFAIT,1.0,1.0,4945000.0,4945000.0,0.0,True,True,0
+LOT 1,ENDUITS INTERIEURS ET EXTERIEURS SUR MURS,Enduits intérieurs et extérieurs sur murs,Enduits intérieurs et extérieurs sur murs,M2,M2,5375.14,1.0,20570662.0,3827.0,-20566835.0,True,True,0
+LOT 1,ENDUITS SOUS PLAFOND,Enduits sous plafond,Enduits sous plafond,M2,M2,2006.0,1.0,7676962.0,3827.0,-7673135.0,True,True,0
+LOT 1,ENSEMBLE DES AXES NECESSAIRES,Ensemble des axes necessaires,Ensemble des axes necessaires,ENS,FORFAIT,1.0,1.0,1265000.0,1265000.0,0.0,True,True,0
+LOT 1,ETUDES TECHNIQUES ET ESSAIS,Études techniques et Essais,Études techniques et Essais,ENS,FORFAIT,1.0,1.0,4795500.0,4795500.0,0.0,True,True,0
+LOT 1,EVACUATION DES GRAVATS HORS SITE,Évacuation des gravats hors site,Évacuation des gravats hors site,FF,FORFAIT,1.0,1.0,552000.0,552000.0,0.0,True,True,0
+LOT 1,FINITION DES TABLEAUX,Finition des tableaux,Finition des tableaux,ENS,FORFAIT,3.0,1.0,8394851.0,2344172.0,-6050679.0,True,True,0
+LOT 1,HOURDIS,Hourdis,,M2,,753.0,0.0,10715943.0,0.0,-10715943.0,True,False,0
+LOT 1,"MATERIEL DE CHANTIER (ENGINS, MANUTENTION ETC)","Matériel de chantier (engins, manutention etc)","Matériel de chantier (engins, manutention etc)",ENS,FORFAIT,1.0,1.0,4213438.0,4213438.0,0.0,True,True,0
+LOT 1,MOBILISATION,Mobilisation,Mobilisation,ENS,FORFAIT,1.0,1.0,4755250.0,4755250.0,0.0,True,True,0
+LOT 1,RESERVATIONS ET CALFEUTREMENTS DIVERS,Réservations et calfeutrements divers,Réservations et calfeutrements divers,ENS,FORFAIT,3.0,1.0,2878450.0,1.0,-2878449.0,True,True,0
+LOT 1,SCELLEMENTS ET RACCORDEMENTS,Scellements et raccordements,Scellements et raccordements,ENS,FORFAIT,3.0,1.0,5175000.0,1.0,-5174999.0,True,True,0
+LOT 10,BOUCHE D'EXTRACTION DE TYPE ALIZE,,Bouche d'extraction de type Alizé,,FORFAIT,0.0,11.0,0.0,302450.0,302450.0,False,True,0
+LOT 10,CABLAGE DES SYSTEME AU COMPLET ET ACCESSOIRES DIVERS,Câblage des système au complet et accessoires divers,,ENS,,1.0,0.0,575000.0,0.0,-575000.0,True,False,0
+LOT 10,CAISSON DE VENTILATION MECANIQUE CONTROLEE,,Caisson de Ventilation Mécanique Contrôlée,,FORFAIT,0.0,2.0,0.0,977500.0,977500.0,False,True,0
+LOT 10,CAMERA EXTERIEURE AVEC PROTECTION SUIVANT DESCRIPTIF,Caméra exterieure avec protection suivant descriptif,,U,,5.0,0.0,1361600.0,0.0,-1361600.0,True,False,0
+LOT 10,CAMERA INTERIEURE FIXE TYPE DOME SUIVANT DESCRIPTIF,Caméra interieure fixe type dome suivant descriptif,,U,,10.0,0.0,2242500.0,0.0,-2242500.0,True,False,0
+LOT 10,CANALISATION ALIMENTATION EN PER 13X16,,Canalisation alimentation en PER 13x16,,ML,0.0,150.0,0.0,517500.0,517500.0,False,True,0
+LOT 10,CANALISATION ALIMENTATION EN PER 16X20,,Canalisation alimentation en PER 16x20,,ML,0.0,150.0,0.0,638250.0,638250.0,False,True,0
+LOT 10,CANALISATION ALIMENTATION EN PER 20X25,,Canalisation alimentation en PER 20x25,,ML,0.0,60.0,0.0,289800.0,289800.0,False,True,0
+LOT 10,CANALISATION ALIMENTATION EN PER 26X32,,Canalisation alimentation en PER 26x32,,ML,0.0,60.0,0.0,448500.0,448500.0,False,True,0
+LOT 10,CANALISATION ALIMENTATION EN PVC D25,Canalisation alimentation en PVC D25,Canalisation alimentation en PVC D25,ML,ML,40.0,40.0,170200.0,170200.0,0.0,True,True,0
+LOT 10,CANALISATION ALIMENTATION EN PVC D32,Canalisation alimentation en PVC D32,Canalisation alimentation en PVC D32,ML,ML,150.0,150.0,724500.0,724500.0,0.0,True,True,0
+LOT 10,CANALISATION ALIMENTATION EN PVC D40,Canalisation alimentation en PVC D40,Canalisation alimentation en PVC D40,ML,ML,50.0,50.0,270250.0,270250.0,0.0,True,True,0
+LOT 10,CANALISATION ALIMENTATION EN PVC D75,Canalisation alimentation en PVC D75,Canalisation alimentation en PVC D75,ML,ML,50.0,50.0,299000.0,299000.0,0.0,True,True,0
+LOT 10,CANALISATION EVACUATION EN PVC D110,Canalisation évacuation en PVC D110,Canalisation évacuation en PVC D110,ML,ML,400.0,400.0,4489600.0,4489600.0,0.0,True,True,0
+LOT 10,CANALISATION EVACUATION EN PVC D125,Canalisation évacuation en PVC D125,Canalisation évacuation en PVC D125,ML,ML,80.0,80.0,1113200.0,1113200.0,0.0,True,True,0
+LOT 10,CANALISATION EVACUATION EN PVC D160,Canalisation évacuation en PVC D160,Canalisation évacuation en PVC D160,ML,ML,25.0,25.0,533175.0,533175.0,0.0,True,True,0
+LOT 10,CANALISATION EVACUATION EN PVC D200,Canalisation évacuation en PVC D200,Canalisation évacuation en PVC D200,ML,ML,10.0,10.0,235750.0,235750.0,0.0,True,True,0
+LOT 10,CANALISATION EVACUATION EN PVC D25 (CE),Canalisation évacuation en PVC D25 (CE),Canalisation évacuation en PVC D25 (CE),ML,ML,100.0,100.0,425500.0,425500.0,0.0,True,True,0
+LOT 10,CANALISATION EVACUATION EN PVC D40,Canalisation évacuation en PVC D40,Canalisation évacuation en PVC D40,ML,ML,100.0,100.0,563500.0,563500.0,0.0,True,True,0
+LOT 10,CANALISATION EVACUATION EN PVC D50,Canalisation évacuation en PVC D50,Canalisation évacuation en PVC D50,ML,ML,80.0,80.0,478400.0,478400.0,0.0,True,True,0
+LOT 10,CANALISATION EVACUATION EN PVC D63,Canalisation évacuation en PVC D63,Canalisation évacuation en PVC D63,ML,ML,90.0,90.0,724500.0,724500.0,0.0,True,True,0
+LOT 10,CANALISATION EVACUATION EN PVC D75,Canalisation évacuation en PVC D75,Canalisation évacuation en PVC D75,ML,ML,120.0,120.0,1145400.0,1145400.0,0.0,True,True,0
+LOT 10,CHAUFFE EAU 100 LITRES,Chauffe eau 100 litres,Chauffe eau 100 litres,U,FORFAIT,2.0,2.0,632500.0,632500.0,0.0,True,True,0
+LOT 10,CHAUFFE EAU 50 LITRES,Chauffe eau 50 litres,Chauffe eau 50 litres,U,FORFAIT,5.0,5.0,1006250.0,1006250.0,0.0,True,True,0
+LOT 10,CHAUFFE EAU 75 LITRES,Chauffe eau 75 litres,Chauffe eau 75 litres,U,FORFAIT,5.0,5.0,1236250.0,1236250.0,0.0,True,True,0
+LOT 10,COLLECTEURS A ROBINETTERIE INTEGREE (EF+EC),,Collecteurs à robinetterie intégrée (EF+EC),,FORFAIT,0.0,35.0,0.0,19271000.0,19271000.0,False,True,0
+LOT 10,CONDUIT SPIRALE EN ACIER GALVANISE D125,,Conduit spiralé en acier galvanisé D125,,ML,0.0,50.0,0.0,718750.0,718750.0,False,True,0
+LOT 10,CONDUIT SPIRALE EN ACIER GALVANISE D160,,Conduit spiralé en acier galvanisé D160,,ML,0.0,80.0,0.0,1564000.0,1564000.0,False,True,0
+LOT 10,CONDUIT SPIRALE EN ACIER GALVANISE D200,,Conduit spiralé en acier galvanisé D200,,ML,0.0,30.0,0.0,876300.0,876300.0,False,True,0
+LOT 10,"ENSEMBLE VANNE, COMPTEUR, CLAPET ANTI-",,"Ensemble vanne, compteur, clapet anti-",,FORFAIT,0.0,1.0,0.0,862500.0,862500.0,False,True,0
+LOT 10,EVIER,Evier,Evier,U,FORFAIT,6.0,6.0,655500.0,655500.0,0.0,True,True,0
+LOT 10,KIT CONTROLE D'ACCES PORTE,kit contrôle d'accès porte,,U,,10.0,0.0,2300000.0,0.0,-2300000.0,True,False,0
+LOT 10,LAVABO OU VASQUE SIMPLE,Lavabo ou Vasque simple,Lavabo ou Vasque simple,U,FORFAIT,32.0,32.0,4048000.0,4048000.0,0.0,True,True,0
+LOT 10,MONITEUR LCD SUIVANT DESCRITIF,Moniteur LCD suivant descritif,,U,,1.0,0.0,184000.0,0.0,-184000.0,True,False,0
+LOT 10,RECEVEUR DE DOUCHE,Receveur de douche,Receveur de douche,U,FORFAIT,12.0,12.0,6210000.0,6210000.0,0.0,True,True,0
+LOT 10,SERVEUR D'ENREGISTREMENT NVR SUIVANT DESCRIPTIF,Serveur d'enregistrement NVR suivant descriptif,,U,,1.0,0.0,1092500.0,0.0,-1092500.0,True,False,0
+LOT 10,SIPHON DE SOL D63,,Siphon de sol D63,,FORFAIT,0.0,15.0,0.0,172500.0,172500.0,False,True,0
+LOT 10,"STATION DE SURPRESSION AU COMPLET COMPRENANT LES 2 POMPES DE SURPRESSION SANITAIRE DE 27 M3/H - 35 MCE Y COMPRIS UNE VESSIE DE 300 LITRES, ACCESSOIRES DE RACCORDEMENT ET EQUIPEMENTS DE LA BACHE A EAU",,"Station de surpression au complet comprenant les 2 pompes de surpression sanitaire de 27 m3/h - 35 mCE y compris une vessie de 300 litres, accessoires de raccordement et équipements de la bâche à eau",,FORFAIT,0.0,1.0,0.0,1725000.0,1725000.0,False,True,0
+LOT 10,TAMPON DE FERMETURE EN FONTE POUR FOSSES,,Tampon de fermeture en fonte pour fosses,,FORFAIT,0.0,5.0,0.0,2012500.0,2012500.0,False,True,0
+LOT 10,WC A L'ANGLAISE,WC à l'anglaise,WC à l'anglaise,FF,FORFAIT,34.0,34.0,8993000.0,8993000.0,0.0,True,True,0
+LOT 13,F & P PANNEAU COMPOSITE DE TYPE ALUCOBOND SUR TOUTE LA FACADE EXTERIEURE,F & P panneau composite de type Alucobond sur toute la façade extérieure,F & P panneau composite de type Alucobond sur toute la façade extérieure,M2,M2,2134.975,423.97,159589381.0,74088757.5,-85500623.5,True,True,0
+LOT 14,"PEINTURE INTERIEURE COMPRISSANT UNE IMPRESSION EN PANTIPRIM, 02 COUCHES D'ENDUITS REPASSES ET 02 COUCHES DE FINITIONS EN PANTE 800",,"Peinture intérieure comprissant une impression en pantiprim, 02 couches d'enduits repassés et 02 couches de finitions en pante 800",,M2,0.0,4961.08,0.0,31378831.0,31378831.0,False,True,0
+LOT 14,"PEINTURE INTERIEURE COMPRNANT UNE IMPRESSION EN PANTIPRIM, 02 COUCHES D'ENDUITS REPASSES ET 02 COUCHES DE FINITIONS EN PANTEX 800","Peinture intérieure comprnant une impréssion en pantiprim, 02 couches d'enduits repassés et 02 couches de finitions en pantex 800",,M2,,7621.712,0.0,48207329.0,0.0,-48207329.0,True,False,0
+LOT 14,PREPARATION DE SURFACE,,Préparation de surface,,M2,0.0,4961.08,0.0,2852621.0,2852621.0,False,True,0
+LOT 14,PREPARTION DE SURFACE,Prépartion de surface,,M2,,7621.712,0.0,4382485.0,0.0,-4382485.0,True,False,0
+LOT 2,FORME DE PENTE,Forme de pente,Forme de pente,M2,M2,459.75,690.75,5421832.0,8146014.75,2724182.75,True,True,0
+LOT 2,RELEVE D'ETANCHEITE H=50 CM,Relevé d'étanchéité h=50 cm,Relevé d'étanchéité h=50 cm,ML,ML,733.61,834.79,6339125.0,7213420.39,874295.39,True,True,0
+LOT 2,REVETEMENT BICOUCHE,Revêtement bicouche,,M2,,61.54,0.0,1063165.0,0.0,-1063165.0,True,False,0
+LOT 2,REVETEMENT BICOUCHE SOUS PROTECTION LOURDE,Revêtement bicouche sous protection lourde,Revêtement bicouche sous protection lourde,M2,M2,320.0,320.0,11056640.0,11056640.0,0.0,True,True,0
+LOT 2,REVETEMENT MONOCOUCHE,Revêtement monocouche,Revêtement monocouche,M2,M2,287.82,349.36,4972378.0,6035543.36,1063165.36,True,True,0
+LOT 2,REVETEMENT MONOCOUCHE SOUS PROTECTION,Revêtement monocouche sous protection,,M2,,83.0,0.0,1433908.0,0.0,-1433908.0,True,False,0
+LOT 2,REVETEMENT MONOCOUCHE SOUS PROTECTION LOURDE,Revêtement monocouche sous protection lourde,Revêtement monocouche sous protection lourde,M2,M2,56.75,370.75,980413.0,6405077.0,5424664.0,True,True,0
+LOT 3,FAIENCE MURALE EN GRANITE OU SIMILAIRE,Faïence murale en granite ou similaire,Faïence murale en granite ou similaire,M2,M2,1410.44,1410.44,39739148.0,39739147.0,-1.0,True,True,0
+LOT 3,FORME DE PENTE,Forme de pente,,M2,,231.0,0.0,2724183.0,0.0,-2724183.0,True,False,0
+LOT 3,GRANITE TILE : SARADO GREY-FLAMED 60X60,Granite tile : SARADO Grey-Flamed 60x60,Granite tile : SARADO Grey-Flamed 60x60,M2,M2,2869.0,2869.0,97330825.0,97330825.0,0.0,True,True,0
+LOT 3,PLINTHE 10X60 GRANITE TILE : SARADO GREY- FLAMED,Plinthe 10x60 Granite tile : SARADO Grey- Flamed,,ML,,2198.62,0.0,12642065.0,0.0,-12642065.0,True,False,0
+LOT 3,PLINTHE 10X60 GRANITE TILE : SARADO GREY-FLAMED,,Plinthe 10x60 Granite tile : SARADO Grey-Flamed,,ML,0.0,2198.62,0.0,12642065.0,12642065.0,False,True,0
+LOT 3,RELEVE D'ETANCHEITE H=50 CM,Relevé d'étanchéité h=50 cm,,ML,,101.1,0.0,873605.0,0.0,-873605.0,True,False,0
+LOT 3,REVETEMENT BICOUCHE SOUS PROTECTION,Revêtement bicouche sous protection,,M2,,231.0,0.0,3990756.0,0.0,-3990756.0,True,False,0
+LOT 3,TABLE DE TRAVAIL EN GRANITE OU SIMILAIRE,Table de travail en granite ou similaire,Table de travail en granite ou similaire,ML,ML,5.19,5.19,2685825.0,2685825.0,0.0,True,True,0
+LOT 6,ETAGERE INFERIEURE DE LA CUISINE,Étagére inférieure de la cuisine,Étagère inférieure de la cuisine,ML,ML,3.36,6.3,1352400.0,2535750.0,1183350.0,True,True,0
+LOT 6,ETAGERE INFERIEURE DE LA VAISSELLERIE,,Étagère inférieure de la vaissellerie,,ML,0.0,2.25,0.0,905625.0,905625.0,False,True,0
+LOT 6,ETAGERE SUPERIEURE DE LA CUISINE,Étagére supérieure de la cuisine,Étagère supérieure de la cuisine,ML,ML,3.36,6.3,1159200.0,2173500.0,1014300.0,True,True,0
+LOT 6,ETAGERE SUPERIEURE DE LA VAISSELLERIE,,Étagère supérieure de la vaissellerie,,ML,0.0,2.25,0.0,905625.0,905625.0,False,True,0
+LOT 6,PB 80 X 220 OUVRANT A LA FRANCAISE,PB 80 x 220 ouvrant à la française,,U,,10.0,0.0,3415500.0,0.0,-3415500.0,True,False,0
+LOT 6,PB 90 X 220 OUVRANT A LA FRANCAISE,PB 90 x 220 ouvrant à la française,PB 90 x 220 ouvrant à la française,U,FORFAIT,11.0,11.0,3757050.0,3757050.0,0.0,True,True,0
+LOT 6,PL 180 X 250 OUVRANT A LA FRANCAISE,PL 180 x 250 ouvrant à la française,,U,,1.0,0.0,621000.0,0.0,-621000.0,True,False,0
+LOT 6,PL 215 X 200 OUVRANT A LA FRANCAISE,PL 215 x 200 ouvrant à la française,,U,,1.0,0.0,593400.0,0.0,-593400.0,True,False,0
+LOT 6,PL 227 X 200 OUVRANT A LA FRANCAISE,PL 227 x 200 ouvrant à la française,,U,,1.0,0.0,626520.0,0.0,-626520.0,True,False,0
+LOT 6,PL 230 X 250 OUVRANT A LA FRANCAISE,PL 230 x 250 ouvrant à la française,,U,,2.0,0.0,1587000.0,0.0,-1587000.0,True,False,0
+LOT 6,PL 275 X 200 OUVRANT A LA FRANCAISE,PL 275 x 200 ouvrant à la française,PL 275 x 200 ouvrant à la française,U,FORFAIT,1.0,13.0,759000.0,9867000.0,9108000.0,True,True,0
+LOT 6,PL 299 X 200 OUVRANT A LA FRANCAISE,PL 299 x 200 ouvrant à la française,,U,,1.0,0.0,825240.0,0.0,-825240.0,True,False,0
+LOT 6,PL 300 X 250 OUVRANT A LA FRANCAISE,PL 300 x 250 ouvrant à la française,,U,,2.0,0.0,2070000.0,0.0,-2070000.0,True,False,0
+LOT 6,PL 302 X 250 OUVRANT A LA FRANCAISE,PL 302 x 250 ouvrant à la française,,U,,2.0,0.0,2083800.0,0.0,-2083800.0,True,False,0
+LOT 6,PL 315 X 200 OUVRANT A LA FRANCAISE,PL 315 x 200 ouvrant à la française,,U,,1.0,0.0,869400.0,0.0,-869400.0,True,False,0
+LOT 6,PL 325 X 200 OUVRANT A LA FRANCAISE,PL 325 x 200 ouvrant à la française,,U,,1.0,0.0,897000.0,0.0,-897000.0,True,False,0
+LOT 7,"ACCESSOIRES, RACCORDEMENT, ESSAI ET MISE EN SERVICE","Accessoires, raccordement, essai et mise en service",,FORFAIT,,1.0,0.0,4025000.0,0.0,-4025000.0,True,False,0
+LOT 7,APPLIQUE MURAL,Applique mural,Applique mural,U,FORFAIT,8.0,8.0,110400.0,110400.0,0.0,True,True,0
+LOT 7,APPLIQUE MURAL ETANCHE,Applique mural étanche,Applique mural étanche,U,FORFAIT,12.0,12.0,248400.0,248400.0,0.0,True,True,0
+LOT 7,APPLIQUE SANITAIRE PC+INT,Applique sanitaire PC+Int,Applique sanitaire PC+Int,U,FORFAIT,32.0,32.0,331200.0,331200.0,0.0,True,True,0
+LOT 7,BATTERIE GEL 200 AH / 12V,Batterie gel 200 AH / 12V,,U,,20.0,0.0,5635000.0,0.0,-5635000.0,True,False,0
+LOT 7,BLOC AUTONOME D'ECLAIRAGE DE SECURITE ETANCHE TYPE A INCANDESCENCE AUTONOMIE 1H DE LEGRAND OU SIMILAIRE : AMBIANCE,Bloc autonome d'éclairage de sécurité étanche type à incandescence autonomie 1h de LEGRAND ou similaire : Ambiance,Bloc autonome d'éclairage de sécurité étanche type à incandescence autonomie 1h de LEGRAND ou similaire : Ambiance,U,FORFAIT,64.0,64.0,4305600.0,4305600.0,0.0,True,True,0
+LOT 7,BLOC AUTONOME D'ECLAIRAGE DE SECURITE ETANCHE TYPE A INCANDESCENCE AUTONOMIE 1H DE LEGRAND OU SIMILAIRE : DIRECTION,Bloc autonome d'éclairage de sécurité étanche type à incandescence autonomie 1h de LEGRAND ou similaire : Direction,Bloc autonome d'éclairage de sécurité étanche type à incandescence autonomie 1h de LEGRAND ou similaire : Direction,U,FORFAIT,76.0,76.0,3277500.0,3277500.0,0.0,True,True,0
+LOT 7,BOITE DE DERIVATION PLEXO 105X105,Boite de dérivation plexo 105x105,,U,,200.0,0.0,1150000.0,0.0,-1150000.0,True,False,0
+LOT 7,BOITE DE DERIVATION PLEXO 180X110,Boite de dérivation plexo 180x110,,U,,25.0,0.0,287500.0,0.0,-287500.0,True,False,0
+LOT 7,BOITIER CARREE BATIBOX,Boitier carrée Batibox,,U,,800.0,0.0,460000.0,0.0,-460000.0,True,False,0
+LOT 7,BOUTON POUSSOIRE AVEC TEMOIN,Bouton poussoire avec témoin,Bouton poussoire avec témoin,U,FORFAIT,20.0,20.0,207000.0,207000.0,0.0,True,True,0
+LOT 7,CABLE U1000R2V 1X120MM2,Câble U1000R2V 1x120mm²,,ML,,150.0,0.0,6900000.0,0.0,-6900000.0,True,False,0
+LOT 7,CABLE U1000R2V 1X95MM2 V/J,Câble U1000R2V 1x95mm² V/J,,ML,,50.0,0.0,718750.0,0.0,-718750.0,True,False,0
+LOT 7,"CABLE U1000R2V 3G1,5MM2","Câble U1000R2V 3G1,5mm²",,ML,,6500.0,0.0,7475000.0,0.0,-7475000.0,True,False,0
+LOT 7,"CABLE U1000R2V 3G2,5MM2","Câble U1000R2V 3G2,5mm²",,ML,,7500.0,0.0,11212500.0,0.0,-11212500.0,True,False,0
+LOT 7,CABLE U1000R2V 3G6MM2,Câble U1000R2V 3G6mm²,,ML,,500.0,0.0,2875000.0,0.0,-2875000.0,True,False,0
+LOT 7,CABLE U1000R2V 5G10MM2,Câble U1000R2V 5G10mm²,,ML,,300.0,0.0,4830000.0,0.0,-4830000.0,True,False,0
+LOT 7,CABLE U1000R2V 5G25MM2,Câble U1000R2V 5G25mm²,,ML,,300.0,0.0,8107500.0,0.0,-8107500.0,True,False,0
+LOT 7,CHEMIN DE CABLE CABLEFIL 100X50X3000MM,Chemin de câble Câblefil 100x50x3000mm,,U,,50.0,0.0,1437500.0,0.0,-1437500.0,True,False,0
+LOT 7,CHEMIN DE CABLE CABLEFIL 200X50X3000MM,Chemin de câble Câblefil 200x50x3000mm,,U,,50.0,0.0,1725000.0,0.0,-1725000.0,True,False,0
+LOT 7,CHEMIN DE CABLE CABLEFIL 300X50X3000MM,Chemin de câble Câblefil 300x50x3000mm,,U,,15.0,0.0,655500.0,0.0,-655500.0,True,False,0
+LOT 7,CHEMIN DE CABLE CABLEFIL 500X50X3000MM,Chemin de câble Câblefil 500x50x3000mm,,U,,10.0,0.0,517500.0,0.0,-517500.0,True,False,0
+LOT 7,DALLE LED 60X60 40W,Dalle led 60x60 40W,Dalle led 60x60 40W,U,FORFAIT,135.0,135.0,5433750.0,5433750.0,0.0,True,True,0
+LOT 7,DETECTEUR DE PRESENCE,Détecteur de presence,Détecteur de presence,U,FORFAIT,15.0,15.0,690000.0,690000.0,0.0,True,True,0
+LOT 7,ENSEMBLE ACESSOIRES DE POSE ET RACCORDEMENT SUIVANT PLANS ET DESCRIPTIF,Ensemble acessoires de pose et raccordement suivant plans et descriptif,,ENS,,1.0,0.0,1725000.0,0.0,-1725000.0,True,False,0
+LOT 7,ENSEMBLE DES PRISES DE TERRE COMPLETES Y COMPRIS BARRETTES ET LIAISONS EQUIPOTENTIELLES SUIVANT PLANS ET SCHEMAS,Ensemble des prises de terre complètes y compris barrettes et liaisons équipotentielles suivant plans et schémas,,ENS,,1.0,0.0,989000.0,0.0,-989000.0,True,False,0
+LOT 7,ETAGERE INFERIEURE DE LA CUISINE,Étagére inférieure de la cuisine,,ML,,2.94,0.0,1014300.0,0.0,-1014300.0,True,False,0
+LOT 7,ETAGERE INFERIEURE DE LA VAISSELERIE,Étagére inférieure de la vaisselerie,,ML,,2.25,0.0,905625.0,0.0,-905625.0,True,False,0
+LOT 7,ETAGERE SUPERIEURE DE LA CUISINE,Étagére supérieure de la cuisine,,ML,,2.94,0.0,1014300.0,0.0,-1014300.0,True,False,0
+LOT 7,ETAGERE SUPERIEURE DE LA VAISSELERIE,Étagére supérieure de la vaisselerie,,ML,,2.25,0.0,905625.0,0.0,-905625.0,True,False,0
+LOT 7,GAINE ICTA DE 20MM - ROULEAU DE 100M,Gaine ICTA de 20mm - rouleau de 100m,,U,,100.0,0.0,2645000.0,0.0,-2645000.0,True,False,0
+LOT 7,GAINE TETE DE LIT,Gaine tête de lit,,U,,18.0,0.0,6624000.0,0.0,-6624000.0,True,False,0
+LOT 7,GAINE TPC DE 110 ROULEAU DE 25M,Gaine TPC de 110 rouleau de 25M,,ML,,84.0,0.0,2948000.0,0.0,-2948000.0,True,False,0
+LOT 7,GROUPE ELECTROGENE INSONORISE 60 KVA,Groupe électrogéne insonorisé 60 KVA,,ENS,,1.0,0.0,17250000.0,0.0,-17250000.0,True,False,0
+LOT 7,INTERRUPTEUR SIMPLE ALLUMAGE,Interrupteur simple allumage,Interrupteur simple allumage,U,FORFAIT,128.0,128.0,1030400.0,1030400.0,0.0,True,True,0
+LOT 7,INTERRUPTEUR VA ET VIENT,Interrupteur va et vient,Interrupteur va et vient,U,FORFAIT,90.0,90.0,724500.0,724500.0,0.0,True,True,0
+LOT 7,INVERSEUR AUTOMATIQUE DE SOURCE TRIPHASE,Inverseur automatique de source triphasé,Inverseur automatique de source triphasé,U,FORFAIT,1.0,1.0,4197500.0,4197500.0,0.0,True,True,0
+LOT 7,MODULE PHOTOVALTAIQUE 300WC/ 24V,Module photovaltaîque 300Wc/ 24V,,U,,32.0,0.0,5888000.0,0.0,-5888000.0,True,False,0
+LOT 7,ONDULEUR HYBRID 12 KVA / 48 VDC,Onduleur hybrid 12 KVA / 48 VDC,,U,,1.0,0.0,3450000.0,0.0,-3450000.0,True,False,0
+LOT 7,PANEL LED 120X30CM,Panel led 120x30cm,Panel led 120x30cm,U,FORFAIT,36.0,36.0,2691000.0,171000.0,-2520000.0,True,True,0
+LOT 7,PAQUET DE CONSOLE CDC 100 GALVA - 10PCS,Paquet de console CDC 100 galva - 10pcs,,U,,10.0,0.0,264500.0,0.0,-264500.0,True,False,0
+LOT 7,PAQUET DE CONSOLE CDC 200 GALVA - 10PCS,Paquet de console CDC 200 galva - 10pcs,,U,,10.0,0.0,345000.0,0.0,-345000.0,True,False,0
+LOT 7,PAQUET DE CONSOLE CDC 300 GALVA - 10PCS,Paquet de console CDC 300 galva - 10pcs,,U,,3.0,0.0,120750.0,0.0,-120750.0,True,False,0
+LOT 7,PAQUET DE CONSOLE CDC 500 GALVA - 10PCS,Paquet de console CDC 500 galva - 10pcs,,U,,2.0,0.0,115000.0,0.0,-115000.0,True,False,0
+LOT 7,PRISE DE COURANT ETANCHE,Prise de courant étanche,Prise de courant étanche,U,FORFAIT,25.0,25.0,201250.0,201250.0,0.0,True,True,0
+LOT 7,PRISE DE COURANT MOSAIQUE BLANC COMPLET,Prise de courant mosaique blanc complet,Prise de courant mosaique blanc complet,U,FORFAIT,324.0,324.0,1863000.0,1863000.0,0.0,True,True,0
+LOT 7,PRISE DE COURANT MOSAIQUE ROUGE COMPLET,Prise de courant mosaique rouge complet,Prise de courant mosaique rouge complet,U,FORFAIT,100.0,100.0,805000.0,805000.0,0.0,True,True,0
+LOT 7,PRISE RESEAU,Prise réseau,Prise réseau,U,FORFAIT,50.0,50.0,287500.0,287500.0,0.0,True,True,0
+LOT 7,PRISE TELEPHONE,Prise télephone,Prise téléphone,U,FORFAIT,46.0,46.0,264500.0,264500.0,0.0,True,True,0
+LOT 7,PRISE TV,Prise TV,Prise TV,U,FORFAIT,46.0,46.0,264500.0,264500.0,0.0,True,True,0
+LOT 7,REGLETTE ENCASTRABLE 60X60 4X14W,Reglètte encastrable 60x60 4x14W,Reglètte encastrable 60x60 4x14W,U,FORFAIT,25.0,257.0,1868750.0,1220750.0,-648000.0,True,True,0
+LOT 7,REGLETTE ETANCHE 2X20W,Reglètte étanche 2x20w,Reglètte étanche 2x20w,U,FORFAIT,20.0,20.0,805000.0,805000.0,0.0,True,True,0
+LOT 7,"SPOT ENCASTRABLE HALLOGENE G5,3","Spot encastrable hallogène G5,3","Spot encastrable hallogène G5,3",U,FORFAIT,76.0,76.0,2622000.0,2622000.0,0.0,True,True,0
+LOT 7,SPOT LED 14W,Spot led 14w,Spot led 14w,U,FORFAIT,20.0,20.0,138000.0,138000.0,0.0,True,True,0
+LOT 7,SPOT LED 18W,Spot led 18w,Spot led 18w,U,FORFAIT,40.0,40.0,736000.0,736000.0,0.0,True,True,0
+LOT 7,SPOT LED 22W,Spot led 22w,Spot led 22w,U,FORFAIT,24.0,24.0,496800.0,496800.0,0.0,True,True,0
+LOT 7,TABLE DE DISTRIBUTION COURANT NORMAL AVEC TOUTES SUJETIONS,Table de distribution courant normal avec toutes sujétions,,U,,4.0,0.0,8510000.0,0.0,-8510000.0,True,False,0
+LOT 7,TABLE DE DISTRIBUTION COURANT ONDULE AVEC TOUTES SUJETIONS,Table de distribution courant ondulé avec toutes sujétions,,U,,1.0,0.0,977500.0,0.0,-977500.0,True,False,0
+LOT 7,TGBT PRECABLE AVEC TOUTES SUJETIONS,TGBT Précâblé avec toutes sujétions,,U,,1.0,0.0,8050000.0,0.0,-8050000.0,True,False,0
+LOT 7,TGDO PRECABLE DE AVEC TOUTES SUJETIONS,TGDO précâblé de avec toutes sujétions,,U,,1.0,0.0,3542000.0,0.0,-3542000.0,True,False,0
+LOT 7,UPS TRIPHASE 30 KVA,UPS Triphasé 30 KVA,,U,,2.0,0.0,20700000.0,0.0,-20700000.0,True,False,0

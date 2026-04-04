@@ -1,0 +1,13 @@
+scenario,kpi,backend,dashboard,ecart,ecart_pct,statut
+Sans filtre,capex_brut,1129667152.0,1129667152.0,0.0,0.0,OK
+Sans filtre,capex_optimise,584017781.5375459,584017781.5375459,0.0,0.0,OK
+Sans filtre,economie,545649370.4624541,545649370.4624541,0.0,0.0,OK
+Sans filtre,taux_optimisation,0.4830178247605221,0.4830178247605221,0.0,0.0,OK
+Filtre LOT: LOT 1 - Gros œuvre et démolition,capex_brut,218723945.0,218723945.0,0.0,0.0,OK
+Filtre LOT: LOT 1 - Gros œuvre et démolition,capex_optimise,218723945.0,218723945.0,0.0,0.0,OK
+Filtre LOT: LOT 1 - Gros œuvre et démolition,economie,0.0,0.0,0.0,0.0,OK
+Filtre LOT: LOT 1 - Gros œuvre et démolition,taux_optimisation,0.0,0.0,0.0,0.0,OK
+Filtre FAMILLE: Alucobond – Bardage Façade,capex_brut,159589381.0,159589381.0,0.0,0.0,OK
+Filtre FAMILLE: Alucobond – Bardage Façade,capex_optimise,12179389.848129407,12179389.848129407,0.0,0.0,OK
+Filtre FAMILLE: Alucobond – Bardage Façade,economie,147409991.1518706,147409991.1518706,0.0,0.0,OK
+Filtre FAMILLE: Alucobond – Bardage Façade,taux_optimisation,0.9236829557717917,0.9236829557717917,0.0,0.0,OK

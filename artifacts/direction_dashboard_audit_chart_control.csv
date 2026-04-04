@@ -1,0 +1,13 @@
+scenario,graphique,source_total,graph_total,ecart,statut
+Sans filtre,CAPEX par lot,1129667152.0,1129667152.0,0.0,OK
+Sans filtre,Economie par famille,545649370.4624541,545649370.4624541,0.0,OK
+Sans filtre,Structure decision,584017781.5375459,584017781.5375459,0.0,OK
+Sans filtre,Top articles import,310795303.94294256,310795303.94294256,0.0,OK
+Filtre LOT: LOT 1 - Gros œuvre et démolition,CAPEX par lot,218723945.0,218723945.0,0.0,OK
+Filtre LOT: LOT 1 - Gros œuvre et démolition,Economie par famille,0.0,0.0,0.0,OK
+Filtre LOT: LOT 1 - Gros œuvre et démolition,Structure decision,218723945.0,218723945.0,0.0,OK
+Filtre LOT: LOT 1 - Gros œuvre et démolition,Top articles import,0.0,0.0,0.0,OK
+Filtre FAMILLE: Alucobond – Bardage Façade,CAPEX par lot,159589381.0,159589381.0,0.0,OK
+Filtre FAMILLE: Alucobond – Bardage Façade,Economie par famille,147409991.15187058,147409991.15187058,0.0,OK
+Filtre FAMILLE: Alucobond – Bardage Façade,Structure decision,12179389.848129407,12179389.848129407,0.0,OK
+Filtre FAMILLE: Alucobond – Bardage Façade,Top articles import,147409991.15187058,147409991.15187058,0.0,OK
