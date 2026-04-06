@@ -1,26 +1,17 @@
-# Core app
-streamlit==1.45.1
-requests==2.32.3
-pandas==2.2.3
-plotly==6.0.1
-
-# API backend
-fastapi==0.115.12
-uvicorn==0.34.0
-
-# Data / files
-openpyxl==3.1.5
-pdfplumber==0.11.5
-
-# ORM / database
-sqlalchemy==2.0.40
-psycopg[binary]==3.2.6
-pymysql==1.1.1
-
-# Auth / validation
-python-jose[cryptography]==3.4.0
-passlib[bcrypt]==1.7.4
-pydantic[email]==2.11.3
-
-# Streamlit interactions
-streamlit-plotly-events==0.0.6
+streamlit>=1.28.0
+requests>=2.31.0
+pandas>=2.0.0
+numpy>=1.24.0
+openpyxl>=3.1.0
+plotly>=5.17.0
+sqlalchemy>=2.0.0
+fastapi>=0.100.0
+uvicorn>=0.23.0
+python-jose>=3.3.0
+passlib>=1.7.4
+bcrypt>=4.0.0
+cryptography>=41.0.0
+psycopg2-binary>=2.9.0
+pymysql>=1.1.0
+email-validator>=2.0.0
+python-multipart>=0.0.6
