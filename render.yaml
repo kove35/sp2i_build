@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: sp2i-build-api
+    env: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn backend.main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /
+    envVars:
+      - key: SP2I_JWT_SECRET
+        sync: false
+      - key: SP2I_DATABASE_URL
+        sync: false

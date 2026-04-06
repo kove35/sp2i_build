@@ -1,15 +1,26 @@
-fastapi
-uvicorn
-streamlit
-streamlit-plotly-events
-requests
-plotly
-pandas
-openpyxl
-pdfplumber
-sqlalchemy
-python-jose[cryptography]
-passlib[bcrypt]
-pydantic[email]
-psycopg[binary]
-pymysql
+# Core app
+streamlit==1.45.1
+requests==2.32.3
+pandas==2.2.3
+plotly==6.0.1
+
+# API backend
+fastapi==0.115.12
+uvicorn==0.34.0
+
+# Data / files
+openpyxl==3.1.5
+pdfplumber==0.11.5
+
+# ORM / database
+sqlalchemy==2.0.40
+psycopg[binary]==3.2.6
+pymysql==1.1.1
+
+# Auth / validation
+python-jose[cryptography]==3.4.0
+passlib[bcrypt]==1.7.4
+pydantic[email]==2.11.3
+
+# Streamlit interactions
+streamlit-plotly-events==0.0.6

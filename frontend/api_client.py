@@ -8,8 +8,46 @@ import os
 
 import requests
 
+try:
+    import streamlit as st
+except Exception:  # pragma: no cover - fallback defensif
+    st = None
 
-API_BASE_URL = os.getenv("SP2I_API_URL", "http://127.0.0.1:8000")
+
+DEFAULT_LOCAL_API_URL = "http://127.0.0.1:8000"
+
+
+def _resolve_api_base_url() -> str:
+    """
+    Lit l'URL backend depuis l'environnement ou les secrets Streamlit.
+    """
+    if os.getenv("SP2I_API_URL"):
+        return os.getenv("SP2I_API_URL", DEFAULT_LOCAL_API_URL).rstrip("/")
+
+    if st is not None:
+        try:
+            secret_url = st.secrets.get("SP2I_API_URL")
+            if secret_url:
+                return str(secret_url).rstrip("/")
+        except Exception:
+            pass
+
+    return DEFAULT_LOCAL_API_URL
+
+
+API_BASE_URL = _resolve_api_base_url()
+
+
+def fetch_api_health() -> tuple[dict | None, str | None]:
+    """
+    Verifie si l'API distante est joignable.
+    """
+    try:
+        response = requests.get(f"{API_BASE_URL}/", timeout=10)
+        response.raise_for_status()
+        return response.json(), None
+    except requests.RequestException as error:
+        return None, f"Impossible de joindre l'API backend : {error}"
 
 
 def fetch_filter_options() -> tuple[dict | None, str | None]:

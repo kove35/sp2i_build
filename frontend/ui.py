@@ -305,6 +305,7 @@ def build_scatter_chart(
 def show_api_error(error_message: str) -> None:
     st.error(error_message)
     st.info(
-        "Demarrez d'abord le backend FastAPI avec : "
-        "`uvicorn backend.main:app --reload`"
+        "Verifiez la variable d'environnement `SP2I_API_URL`. "
+        "En local, demarrez le backend FastAPI avec "
+        "`uvicorn backend.main:app --reload`."
     )

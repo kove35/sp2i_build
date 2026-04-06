@@ -1,0 +1,68 @@
+# =========================================================
+# SP2I_Build - Git ignore
+# Python + Data + Streamlit + local runtime artifacts
+# =========================================================
+
+# Python cache / build
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+.coverage.*
+htmlcov/
+build/
+dist/
+*.egg-info/
+
+# Virtual environments
+.venv/
+venv/
+env/
+ENV/
+
+# Environment variables / secrets
+.env
+.env.*
+!.env.example
+
+# IDE / editor
+.idea/
+.vscode/*
+!.vscode/settings.json
+
+# Streamlit runtime
+.streamlit/secrets.toml
+
+# Logs
+*.log
+*.err.log
+*.out.log
+
+# Local databases
+*.db
+*.sqlite
+*.sqlite3
+
+# Local artifacts / generated analysis outputs
+artifacts/*.csv
+artifacts/*.json
+artifacts/*.xlsx
+artifacts/*.pdf
+
+# Data sources and large business documents
+*.pdf
+*.xlsx
+*.xlsm
+*.xls
+*.csv
+*.parquet
+
+# Keep source code in data/
+!data/*.py
+
+# OS files
+.DS_Store
+Thumbs.db
