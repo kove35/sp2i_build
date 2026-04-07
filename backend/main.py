@@ -4,15 +4,22 @@ API FastAPI pour exposer les KPI et les graphiques.
 
 from __future__ import annotations
 
+import logging
+
 from fastapi import FastAPI, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
 
 from backend.api.routes.build_analytics import router as build_analytics_router
 from backend.api.routes.erp_dqe import router as erp_dqe_router
-from backend.database import initialize_database
+from backend.config import AUTO_SEED_ANALYTICS
+from backend.database import get_data_debug_stats, initialize_database
+from backend.db.seed_build_analytics import seed_build_analytics
 from backend.schemas import DQEArticlePayload, DashboardFilters
 from backend.services.dashboard_service import DashboardService
 from backend.services.dqe_service import DQEArticleService
+
+
+logger = logging.getLogger(__name__)
 
 saas_import_error: str | None = None
 saas_routers: list = []
@@ -66,6 +73,20 @@ def startup_event() -> None:
     Cree les tables applicatives manquantes au demarrage.
     """
     initialize_database()
+    debug_stats = get_data_debug_stats()
+    logger.info("Etat des donnees au demarrage: %s", debug_stats)
+
+    sqlalchemy_counts = debug_stats.get("sqlalchemy", {}).get("counts", {})
+    source_tables = debug_stats.get("source_sqlite", {}).get("tables", {})
+    build_fact_rows = int(sqlalchemy_counts.get("build_fact_rows", 0))
+    source_staging_rows = int(source_tables.get("staging", {}).get("rows", 0))
+
+    if AUTO_SEED_ANALYTICS and build_fact_rows == 0 and source_staging_rows > 0:
+        logger.warning(
+            "Schema analytique vide detecte avec source SQLite disponible. Lancement du seed automatique."
+        )
+        seed_result = seed_build_analytics()
+        logger.info("Seed automatique termine: %s", seed_result)
 
 
 def build_filters(
@@ -88,6 +109,7 @@ def build_filters(
 @app.get("/")
 def read_root() -> dict:
     available_endpoints = [
+        "/debug/data-stats",
         "/filters",
         "/direction_dataset",
         "/kpi_direction",
@@ -116,6 +138,16 @@ def read_root() -> dict:
     }
 
 
+@app.get("/debug/data-stats")
+def get_data_stats() -> dict:
+    """
+    Expose l'etat des sources de donnees et des volumes utiles au diagnostic.
+    """
+    debug_stats = get_data_debug_stats()
+    debug_stats["default_dashboard_project"] = dashboard_service.get_default_dashboard_project()
+    return debug_stats
+
+
 @app.get("/filters")
 def get_filters() -> dict:
     return dashboard_service.get_filter_options()
@@ -132,7 +164,7 @@ def get_direction_dataset() -> dict:
 @app.get("/direction_kpi_dataset")
 def get_direction_kpi_dataset() -> dict:
     """
-    Retourne le dataset KPI ancre sur le PDF de reference.
+    Retourne le dataset detaille du dashboard Direction.
     """
     return dashboard_service.get_direction_kpi_dataset()
 

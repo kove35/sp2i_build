@@ -12,7 +12,7 @@ from pathlib import Path
 
 from fastapi import HTTPException, status
 
-from backend.config import DATABASE_PATH
+from backend.config import APP_DATABASE_PATH
 from backend.db.session import SessionLocal, initialize_all_sqlalchemy_tables
 from backend.models.build_analytics import (
     BuildArticle,
@@ -103,7 +103,7 @@ class DQEControlService:
         """
         Retourne la liste des DQE PDF deja importes.
         """
-        with sqlite3.connect(DATABASE_PATH) as connection:
+        with sqlite3.connect(APP_DATABASE_PATH) as connection:
             connection.row_factory = sqlite3.Row
             rows = connection.execute(
                 """
@@ -116,7 +116,7 @@ class DQEControlService:
         return [row["source_file"] for row in rows]
 
     def _fetch_source_counts(self, source_file: str) -> dict[str, int]:
-        with sqlite3.connect(DATABASE_PATH) as connection:
+        with sqlite3.connect(APP_DATABASE_PATH) as connection:
             connection.row_factory = sqlite3.Row
             lot_count = connection.execute(
                 "SELECT COUNT(*) AS count FROM source_dqe_pdf_lots WHERE source_file = ?",
@@ -132,7 +132,7 @@ class DQEControlService:
         }
 
     def _load_source_lot_totals(self, source_file: str) -> list[PdfLotTotal]:
-        with sqlite3.connect(DATABASE_PATH) as connection:
+        with sqlite3.connect(APP_DATABASE_PATH) as connection:
             connection.row_factory = sqlite3.Row
             rows = connection.execute(
                 """
@@ -156,7 +156,7 @@ class DQEControlService:
     def _load_source_article_groups(self, source_file: str) -> dict[tuple[str, str], dict]:
         aggregated: dict[tuple[str, str], dict] = {}
 
-        with sqlite3.connect(DATABASE_PATH) as connection:
+        with sqlite3.connect(APP_DATABASE_PATH) as connection:
             connection.row_factory = sqlite3.Row
             rows = connection.execute(
                 """
@@ -419,7 +419,7 @@ class DQEControlService:
         resolved_source_file = self._resolve_source_file(source_file)
         initialize_all_sqlalchemy_tables()
 
-        with sqlite3.connect(DATABASE_PATH) as connection:
+        with sqlite3.connect(APP_DATABASE_PATH) as connection:
             connection.row_factory = sqlite3.Row
             lot_rows = connection.execute(
                 """

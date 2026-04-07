@@ -5,6 +5,7 @@ Services de calcul pour les dashboards SP2I_Build.
 from __future__ import annotations
 
 import json
+import logging
 import re
 import sqlite3
 import unicodedata
@@ -13,10 +14,13 @@ from dataclasses import asdict, dataclass
 import pandas as pd
 import numpy as np
 
-from backend.config import DATABASE_PATH
+from backend.config import APP_DATABASE_PATH
 from backend.schemas import DashboardFilters
 from backend.db.session import SessionLocal
 from backend.services.build_analytics_service import BuildAnalyticsService
+
+
+logger = logging.getLogger(__name__)
 
 
 @dataclass
@@ -113,7 +117,7 @@ class DashboardService:
         finally:
             db_session.close()
 
-        with sqlite3.connect(DATABASE_PATH) as connection:
+        with sqlite3.connect(APP_DATABASE_PATH) as connection:
             connection.execute(
                 """
                 INSERT INTO app_settings(setting_key, setting_value)
@@ -194,19 +198,20 @@ class DashboardService:
 
     def get_direction_kpi_dataset(self) -> dict:
         """
-        Retourne un dataset KPI ancre sur le DQE PDF importe.
+        Retourne le dataset detaille du dashboard Direction.
 
-        Ce dataset sert de source de verite pour les cartes KPI, tandis que
-        `/direction_dataset` reste la source du drill-down et des graphiques detaillees.
+        Toutes les pages historiques s'alignent sur la meme source de verite
+        analytique afin d'eviter des KPI divergents entre l'accueil, Direction,
+        Chantier et Import.
         """
-        dataframe = self._load_direction_kpi_dataframe()
+        dataframe = self._load_dashboard_dataframe(DashboardFilters())
         clean_dataframe = dataframe.copy()
         clean_dataframe = clean_dataframe.replace([np.inf, -np.inf], None)
         clean_dataframe = clean_dataframe.where(pd.notna(clean_dataframe), None)
         return {"items": json.loads(clean_dataframe.to_json(orient="records"))}
 
     def get_direction_dashboard(self, filters: DashboardFilters) -> dict:
-        dataframe = self._load_direction_kpi_dataframe(filters)
+        dataframe = self._load_dashboard_dataframe(filters)
 
         return {
             "dashboard": "direction",
@@ -415,6 +420,7 @@ class DashboardService:
         try:
             project = self._resolve_dashboard_project(db_session)
             if project is None:
+                logger.warning("Aucun projet analytique resolu pour les dashboards.")
                 return pd.DataFrame()
             dataframe = self.analytics_service.build_project_dataframe(db_session, project.id)
         finally:
@@ -504,8 +510,8 @@ class DashboardService:
         from backend.models.build_analytics import BuildProject
 
         default_project_id: int | None = None
-        if DATABASE_PATH.exists():
-            with sqlite3.connect(DATABASE_PATH) as connection:
+        if APP_DATABASE_PATH.exists():
+            with sqlite3.connect(APP_DATABASE_PATH) as connection:
                 row = connection.execute(
                     """
                     SELECT setting_value
@@ -529,6 +535,10 @@ class DashboardService:
             if project is not None:
                 return project
 
+        logger.info(
+            "Aucun default_dashboard_project_id exploitable dans %s, fallback sur le premier projet.",
+            APP_DATABASE_PATH,
+        )
         return (
             db_session.query(BuildProject)
             .order_by(BuildProject.id.asc())
@@ -557,9 +567,13 @@ class DashboardService:
         if source_file is None:
             # Fallback de securite : si aucun PDF n'est importe, on retombe sur
             # la source analytique existante.
+            logger.info(
+                "Aucune source PDF direction detectee dans %s, fallback sur les donnees analytiques.",
+                APP_DATABASE_PATH,
+            )
             return self._apply_filters_to_dataframe(analytics_dataframe, filters)
 
-        with sqlite3.connect(DATABASE_PATH) as connection:
+        with sqlite3.connect(APP_DATABASE_PATH) as connection:
             pdf_dataframe = pd.read_sql_query(
                 """
                 SELECT
@@ -764,10 +778,10 @@ class DashboardService:
         """
         Choisit la source PDF de reference pour les KPI Direction.
         """
-        if not DATABASE_PATH.exists():
+        if not APP_DATABASE_PATH.exists():
             return None
 
-        with sqlite3.connect(DATABASE_PATH) as connection:
+        with sqlite3.connect(APP_DATABASE_PATH) as connection:
             preferred = connection.execute(
                 """
                 SELECT source_file

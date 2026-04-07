@@ -27,7 +27,7 @@ PROJECT_ROOT = Path(__file__).resolve().parent.parent
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
-from backend.config import DATABASE_PATH
+from backend.config import APP_DATABASE_PATH
 from backend.database import initialize_database
 
 
@@ -271,7 +271,7 @@ def import_pdf_to_sqlite(pdf_path: Path) -> dict[str, int | str]:
     lot_rows = extract_recap_lots(pdf_path)
     article_rows = extract_article_rows(pdf_path)
 
-    with sqlite3.connect(DATABASE_PATH) as connection:
+    with sqlite3.connect(APP_DATABASE_PATH) as connection:
         connection.execute(
             "DELETE FROM source_dqe_pdf_lots WHERE source_file = ?",
             (pdf_path.name,),
@@ -347,7 +347,7 @@ def import_pdf_to_sqlite(pdf_path: Path) -> dict[str, int | str]:
         "source_file": pdf_path.name,
         "lots_imported": len(lot_rows),
         "articles_imported": len(article_rows),
-        "database": DATABASE_PATH.name,
+        "database": APP_DATABASE_PATH.name,
     }
 
 

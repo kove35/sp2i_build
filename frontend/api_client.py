@@ -8,46 +8,8 @@ import os
 
 import requests
 
-try:
-    import streamlit as st
-except Exception:  # pragma: no cover - fallback defensif
-    st = None
 
-
-DEFAULT_LOCAL_API_URL = "http://127.0.0.1:8000"
-
-
-def _resolve_api_base_url() -> str:
-    """
-    Lit l'URL backend depuis l'environnement ou les secrets Streamlit.
-    """
-    if os.getenv("SP2I_API_URL"):
-        return os.getenv("SP2I_API_URL", DEFAULT_LOCAL_API_URL).rstrip("/")
-
-    if st is not None:
-        try:
-            secret_url = st.secrets.get("SP2I_API_URL")
-            if secret_url:
-                return str(secret_url).rstrip("/")
-        except Exception:
-            pass
-
-    return DEFAULT_LOCAL_API_URL
-
-
-API_BASE_URL = _resolve_api_base_url()
-
-
-def fetch_api_health() -> tuple[dict | None, str | None]:
-    """
-    Verifie si l'API distante est joignable.
-    """
-    try:
-        response = requests.get(f"{API_BASE_URL}/", timeout=10)
-        response.raise_for_status()
-        return response.json(), None
-    except requests.RequestException as error:
-        return None, f"Impossible de joindre l'API backend : {error}"
+API_BASE_URL = os.getenv("SP2I_API_URL", "http://127.0.0.1:8000")
 
 
 def fetch_filter_options() -> tuple[dict | None, str | None]:
@@ -97,7 +59,10 @@ def fetch_direction_dataset() -> tuple[dict | None, str | None]:
 
 def fetch_direction_kpi_dataset() -> tuple[dict | None, str | None]:
     """
-    Lit le dataset KPI ancre sur le PDF de reference.
+    Lit le dataset detaille du dashboard Direction.
+
+    Conserve l'ancien endpoint pour compatibilite, mais la source de verite
+    est maintenant la base analytique partagee.
     """
     try:
         response = requests.get(f"{API_BASE_URL}/direction_kpi_dataset", timeout=30)

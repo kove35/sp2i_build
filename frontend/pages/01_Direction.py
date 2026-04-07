@@ -25,7 +25,7 @@ PROJECT_ROOT = Path(__file__).resolve().parents[2]
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
-from frontend.api_client import fetch_direction_kpi_dataset
+from frontend.api_client import fetch_direction_dataset
 from frontend.ui import (
     apply_dashboard_style,
     format_currency,
@@ -47,9 +47,9 @@ apply_dashboard_style("Dashboard Direction")
 @st.cache_data(show_spinner=False)
 def load_direction_dataframe() -> pd.DataFrame:
     """
-    Charge le dataset unique du dashboard Direction, ancre sur le PDF.
+    Charge le dataset unique du dashboard Direction depuis la base analytique.
     """
-    payload, error_message = fetch_direction_kpi_dataset()
+    payload, error_message = fetch_direction_dataset()
     if error_message:
         raise RuntimeError(error_message)
 
@@ -69,7 +69,7 @@ def load_direction_dataframe() -> pd.DataFrame:
         dataframe["decision_label"] = "LOCAL"
 
     if "source_name" not in dataframe.columns:
-        dataframe["source_name"] = "PDF"
+        dataframe["source_name"] = "ANALYTICS"
 
     return dataframe
 
@@ -138,7 +138,7 @@ def filter_data(dataframe: pd.DataFrame) -> pd.DataFrame:
 
 def normalize_text(value: str | None) -> str:
     """
-    Normalise les libelles pour les rapprochements article PDF / analytique.
+    Normalise les libelles pour les rapprochements article et les filtres visuels.
     """
     if not value:
         return ""
@@ -195,7 +195,7 @@ def detect_direction_anomalies(dataframe: pd.DataFrame) -> list[str]:
     duplicated_rows = int(dataframe.duplicated(subset=["code_bpu", "designation"]).sum())
     if duplicated_rows:
         anomalies.append(
-            f"Doublons detectes dans la source PDF : {duplicated_rows} lignes sur code_bpu + designation."
+            f"Doublons detectes dans la source analytique : {duplicated_rows} lignes sur code_bpu + designation."
         )
 
     missing_local_amounts = int(dataframe["montant_local"].isna().sum())
@@ -206,14 +206,14 @@ def detect_direction_anomalies(dataframe: pd.DataFrame) -> list[str]:
         unresolved_buildings = int((dataframe["batiment_label"].fillna("Global") == "Global").sum())
         if unresolved_buildings:
             anomalies.append(
-                f"Lignes sans batiment precis deduit depuis le PDF : {unresolved_buildings}."
+                f"Lignes sans batiment precis : {unresolved_buildings}."
             )
 
     if "niveau_label" in dataframe.columns:
         unresolved_levels = int((dataframe["niveau_label"].fillna("GLOBAL") == "GLOBAL").sum())
         if unresolved_levels:
             anomalies.append(
-                f"Lignes sans niveau precis deduit depuis le PDF : {unresolved_levels}."
+                f"Lignes sans niveau precis : {unresolved_levels}."
             )
 
     if "optimization_ratio" in dataframe.columns:
@@ -555,20 +555,20 @@ with control_col_2:
 
 filtered_dataframe = filter_data(source_dataframe)
 kpis = compute_kpis(filtered_dataframe)
-st.success("Source unique du dashboard Direction : PDF DQE de reference")
-st.info("Les filtres BATIMENT et NIVEAU sont maintenant deduits du PDF par analyse textuelle des sections et designations.")
+st.success("Source unique du dashboard Direction : base analytique partagee avec l'accueil, Chantier et Import.")
+st.info("Les KPI et graphiques de cette page utilisent maintenant la meme source de verite que les autres dashboards.")
 
 render_kpi_cards(
     [
         {
             "label": "CAPEX Brut",
             "value": format_currency(kpis["capex_brut"]),
-            "caption": "Source KPI : PDF DQE de reference",
+            "caption": "Source KPI : base analytique",
         },
         {
             "label": "CAPEX Optimise",
             "value": format_currency(kpis["capex_opt"]),
-            "caption": "Optimisation appliquee sur la meme source PDF",
+            "caption": "Scenario calcule sur la meme base analytique",
         },
         {
             "label": "Economie",
@@ -594,7 +594,7 @@ st.info(
 
 anomalies = detect_direction_anomalies(source_dataframe)
 with st.expander("Audit rapide des donnees source", expanded=False):
-    st.caption("Source auditée : dataset PDF unifie du dashboard Direction.")
+    st.caption("Source auditee : dataset analytique unifie du dashboard Direction.")
     if anomalies:
         for anomaly in anomalies:
             st.warning(anomaly)

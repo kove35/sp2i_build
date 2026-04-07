@@ -93,6 +93,18 @@ def _build_option_index(options: list[dict], selected_value) -> int:
     return 0
 
 
+def reset_shared_filters() -> None:
+    """
+    Reinitialise les filtres synchronises entre les pages.
+    """
+    st.session_state.shared_filters = {
+        "lot_id": None,
+        "fam_article_id": None,
+        "batiment_id": None,
+        "niveau_id": None,
+    }
+
+
 def render_sidebar_filters(filter_options: dict) -> dict:
     """
     Affiche des filtres synchronises entre toutes les pages Streamlit.
@@ -153,12 +165,7 @@ def render_sidebar_filters(filter_options: dict) -> dict:
     st.session_state.shared_filters = updated_filters
 
     if st.sidebar.button("Reinitialiser les filtres", use_container_width=True):
-        st.session_state.shared_filters = {
-            "lot_id": None,
-            "fam_article_id": None,
-            "batiment_id": None,
-            "niveau_id": None,
-        }
+        reset_shared_filters()
         st.rerun()
 
     return updated_filters
@@ -180,7 +187,19 @@ def render_active_filters(filters: dict, filter_options: dict) -> None:
         f"Batiment : {find_label(filter_options.get('batiments', []), filters.get('batiment_id')) if filters.get('batiment_id') else 'Tous'}",
         f"Niveau : {find_label(filter_options.get('niveaux', []), filters.get('niveau_id')) if filters.get('niveau_id') else 'Tous'}",
     ]
-    st.caption(" | ".join(labels))
+    summary_col, action_col = st.columns([5, 1])
+    with summary_col:
+        st.caption(" | ".join(labels))
+    with action_col:
+        has_active_filters = any(value is not None for value in filters.values())
+        if st.button(
+            "Effacer",
+            key="clear_shared_filters_button",
+            disabled=not has_active_filters,
+            use_container_width=True,
+        ):
+            reset_shared_filters()
+            st.rerun()
 
 
 def build_donut_chart(dataframe: pd.DataFrame, names: str, values: str, title: str) -> go.Figure:
@@ -305,7 +324,6 @@ def build_scatter_chart(
 def show_api_error(error_message: str) -> None:
     st.error(error_message)
     st.info(
-        "Verifiez la variable d'environnement `SP2I_API_URL`. "
-        "En local, demarrez le backend FastAPI avec "
-        "`uvicorn backend.main:app --reload`."
+        "Demarrez d'abord le backend FastAPI avec : "
+        "`uvicorn backend.main:app --reload`"
     )

@@ -11,6 +11,10 @@ from pathlib import Path
 import pandas as pd
 import plotly.express as px
 import streamlit as st
+try:
+    from streamlit_plotly_events import plotly_events
+except ImportError:  # pragma: no cover - handled visually in Streamlit
+    plotly_events = None
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 if str(PROJECT_ROOT) not in sys.path:
@@ -30,6 +34,28 @@ from frontend.ui import (
 
 st.set_page_config(page_title="Audit Chantier", page_icon="AUDIT", layout="wide")
 apply_dashboard_style("Dashboard Audit Chantier")
+
+
+def _option_lookup(options: list[dict]) -> dict[str, object]:
+    return {str(option["label"]): option["value"] for option in options}
+
+
+def _apply_chart_filter(filter_key: str, label: str | None, options: list[dict]) -> bool:
+    if not label:
+        return False
+
+    selected_value = _option_lookup(options).get(str(label))
+    if selected_value is None:
+        return False
+
+    current_filters = st.session_state.get("shared_filters", {})
+    if current_filters.get(filter_key) == selected_value:
+        return False
+
+    updated_filters = current_filters.copy()
+    updated_filters[filter_key] = selected_value
+    st.session_state.shared_filters = updated_filters
+    return True
 
 
 def wrap_labels(series: pd.Series, width: int = 22) -> pd.Series:
@@ -55,6 +81,7 @@ def build_improved_bar_chart(
             title=title,
             color=y,
             color_continuous_scale=["#0ea5e9", "#22c55e"],
+            custom_data=[x],
         )
     else:
         figure = px.bar(
@@ -64,6 +91,7 @@ def build_improved_bar_chart(
             title=title,
             color=y,
             color_continuous_scale=["#0ea5e9", "#22c55e"],
+            custom_data=[x],
         )
 
     figure.update_layout(
@@ -74,6 +102,9 @@ def build_improved_bar_chart(
         height=500,
         margin=dict(l=40, r=40, t=50, b=150 if not horizontal else 40),
         xaxis_tickangle=-45 if not horizontal else 0,
+    )
+    figure.update_traces(
+        hovertemplate="%{customdata[0]}<br>Valeur=%{x}" if horizontal else "%{customdata[0]}<br>Valeur=%{y}"
     )
     return figure
 
@@ -192,40 +223,91 @@ top_row_left, top_row_right = st.columns(2)
 with top_row_left:
     st.markdown("## Analyse par LOT")
     if not lot_df.empty:
-        st.plotly_chart(
-            build_improved_bar_chart(
-                lot_df,
-                x="lot",
-                y="capex",
-                title="Cout total par lot",
-            ),
-            use_container_width=True,
+        lot_figure = build_improved_bar_chart(
+            lot_df,
+            x="lot",
+            y="capex",
+            title="Cout total par lot",
         )
+        if plotly_events is None:
+            st.plotly_chart(lot_figure, use_container_width=True)
+        else:
+            selected_lot_points = plotly_events(
+                lot_figure,
+                click_event=True,
+                hover_event=False,
+                select_event=False,
+                override_height=420,
+                key="chantier_lot_chart",
+            )
+            clicked_lot = None
+            if selected_lot_points and selected_lot_points[0].get("customdata"):
+                clicked_lot = selected_lot_points[0]["customdata"][0]
+            if selected_lot_points and _apply_chart_filter(
+                "lot_id",
+                clicked_lot,
+                filter_options.get("lots", []),
+            ):
+                st.rerun()
 
 with top_row_right:
     st.markdown("## Analyse par BÂTIMENT")
     if not building_df.empty:
-        st.plotly_chart(
-            build_improved_bar_chart(
-                building_df,
-                x="batiment",
-                y="capex",
-                title="Cout par batiment",
-            ),
-            use_container_width=True,
+        building_figure = build_improved_bar_chart(
+            building_df,
+            x="batiment",
+            y="capex",
+            title="Cout par batiment",
         )
+        if plotly_events is None:
+            st.plotly_chart(building_figure, use_container_width=True)
+        else:
+            selected_building_points = plotly_events(
+                building_figure,
+                click_event=True,
+                hover_event=False,
+                select_event=False,
+                override_height=420,
+                key="chantier_building_chart",
+            )
+            clicked_building = None
+            if selected_building_points and selected_building_points[0].get("customdata"):
+                clicked_building = selected_building_points[0]["customdata"][0]
+            if selected_building_points and _apply_chart_filter(
+                "batiment_id",
+                clicked_building,
+                filter_options.get("batiments", []),
+            ):
+                st.rerun()
 
 st.markdown("## Analyse par NIVEAU")
 if not level_df.empty:
-    st.plotly_chart(
-        build_improved_bar_chart(
-            level_df,
-            x="niveau",
-            y="capex",
-            title="Cout par niveau",
-        ),
-        use_container_width=True,
+    level_figure = build_improved_bar_chart(
+        level_df,
+        x="niveau",
+        y="capex",
+        title="Cout par niveau",
     )
+    if plotly_events is None:
+        st.plotly_chart(level_figure, use_container_width=True)
+    else:
+        selected_level_points = plotly_events(
+            level_figure,
+            click_event=True,
+            hover_event=False,
+            select_event=False,
+            override_height=420,
+            key="chantier_level_chart",
+        )
+        clicked_level = None
+        if selected_level_points and selected_level_points[0].get("customdata"):
+            clicked_level = selected_level_points[0]["customdata"][0]
+        if selected_level_points and _apply_chart_filter(
+            "niveau_id",
+            clicked_level,
+            filter_options.get("niveaux", []),
+        ):
+            st.rerun()
 
 st.markdown("## Répartition LOT x NIVEAU")
 if not lot_level_df.empty:
@@ -257,3 +339,7 @@ if not detail_df.empty:
     detail_df = detail_df.sort_values("CAPEX", ascending=False).head(max(top_n * 2, 10))
     detail_df["CAPEX"] = detail_df["CAPEX"].map(lambda value: f"{value:,.0f}".replace(",", " "))
     st.dataframe(detail_df, use_container_width=True, height=400, hide_index=True)
+
+st.info(
+    "Vous pouvez cliquer sur les graphiques Lot, Batiment et Niveau pour alimenter les filtres partages."
+)

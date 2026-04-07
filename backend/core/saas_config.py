@@ -15,6 +15,17 @@ from pathlib import Path
 BASE_DIR = Path(__file__).resolve().parents[2]
 
 
+def _normalize_database_url(database_url: str) -> str:
+    """
+    Normalise l'URL de base pour SQLAlchemy.
+    """
+    if database_url.startswith("postgres://"):
+        return database_url.replace("postgres://", "postgresql+psycopg2://", 1)
+    if database_url.startswith("postgresql://"):
+        return database_url.replace("postgresql://", "postgresql+psycopg2://", 1)
+    return database_url
+
+
 class SaaSSettings:
     """
     Parametres centralises de l'application SaaS.
@@ -31,9 +42,11 @@ class SaaSSettings:
     # PostgreSQL-ready :
     # exemple :
     # postgresql+psycopg://postgres:postgres@localhost:5432/sp2i_build
-    database_url: str = os.getenv(
-        "SP2I_DATABASE_URL",
-        f"sqlite:///{(BASE_DIR / 'sp2i_saas.db').as_posix()}",
+    database_url: str = _normalize_database_url(
+        os.getenv(
+            "SP2I_DATABASE_URL",
+            f"sqlite:///{(BASE_DIR / 'sp2i_saas.db').as_posix()}",
+        )
     )
 
 
