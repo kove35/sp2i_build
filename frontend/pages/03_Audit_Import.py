@@ -23,11 +23,13 @@ if str(PROJECT_ROOT) not in sys.path:
 from frontend.api_client import fetch_dashboard_data, fetch_filter_options
 from frontend.ui import (
     apply_dashboard_style,
-    build_donut_chart,
     format_currency,
     format_percentage,
     render_active_filters,
+    render_decision_split,
     render_kpi_cards,
+    render_proportional_bars,
+    render_sourcing_matrix,
     render_sidebar_filters,
     show_api_error,
 )
@@ -63,15 +65,27 @@ def wrap_labels(series: pd.Series, width: int = 22) -> pd.Series:
     return series.fillna("").map(lambda value: "<br>".join(textwrap.wrap(str(value), width=width)) or str(value))
 
 
+def _recommended_chart_height(dataframe: pd.DataFrame, horizontal: bool = False) -> int:
+    row_count = max(len(dataframe.index), 1)
+    if horizontal:
+        return max(440, min(980, 120 + row_count * 34))
+    return max(440, min(780, 360 + row_count * 12))
+
+
 def build_improved_bar_chart(
     dataframe: pd.DataFrame,
     x: str,
     y: str,
     title: str,
     horizontal: bool = False,
+    scale_millions: bool = False,
 ):
     chart_df = dataframe.copy()
     chart_df[f"{x}_display"] = wrap_labels(chart_df[x], width=20)
+    original_value_column = "_original_value"
+    if scale_millions and y in chart_df.columns:
+        chart_df[original_value_column] = pd.to_numeric(chart_df[y], errors="coerce").fillna(0.0)
+        chart_df[y] = chart_df[original_value_column] / 1_000_000
 
     if horizontal:
         figure = px.bar(
@@ -80,9 +94,7 @@ def build_improved_bar_chart(
             y=f"{x}_display",
             orientation="h",
             title=title,
-            color=y,
-            color_continuous_scale=["#0ea5e9", "#22c55e"],
-            custom_data=[x],
+            custom_data=[x, original_value_column] if scale_millions else [x],
         )
     else:
         figure = px.bar(
@@ -90,22 +102,73 @@ def build_improved_bar_chart(
             x=f"{x}_display",
             y=y,
             title=title,
-            color=y,
-            color_continuous_scale=["#0ea5e9", "#22c55e"],
-            custom_data=[x],
+            custom_data=[x, original_value_column] if scale_millions else [x],
         )
 
     figure.update_layout(
         paper_bgcolor="rgba(0,0,0,0)",
         plot_bgcolor="rgba(0,0,0,0)",
         font_color="#e5e7eb",
-        coloraxis_showscale=False,
-        height=500,
-        margin=dict(l=40, r=40, t=50, b=150 if not horizontal else 40),
-        xaxis_tickangle=-45 if not horizontal else 0,
+        height=_recommended_chart_height(chart_df, horizontal=horizontal),
+        margin=dict(
+            l=150 if horizontal else 42,
+            r=32,
+            t=58,
+            b=118 if not horizontal else 40,
+        ),
+        xaxis_tickangle=-32 if not horizontal else 0,
+        bargap=0.22,
+        uniformtext_minsize=10,
+        uniformtext_mode="hide",
     )
+    figure.update_xaxes(
+        automargin=True,
+        title_standoff=16,
+        tickfont=dict(size=11),
+        gridcolor="rgba(148, 163, 184, 0.18)",
+    )
+    figure.update_yaxes(
+        automargin=True,
+        title_standoff=16,
+        tickfont=dict(size=11),
+        gridcolor="rgba(148, 163, 184, 0.12)",
+    )
+    if horizontal:
+        figure.update_xaxes(
+            tickformat=",.0f",
+            separatethousands=True,
+            exponentformat="none",
+            showexponent="none",
+        )
+        if scale_millions:
+            figure.update_xaxes(title_text=f"{y} (M FCFA)")
+            hover_template = "%{customdata[0]}<br>Valeur=%{customdata[1]:,.0f} FCFA<extra></extra>"
+        else:
+            hover_template = "%{customdata[0]}<br>Valeur=%{x:,.0f}<extra></extra>"
+    else:
+        figure.update_yaxes(
+            tickformat=",.0f",
+            separatethousands=True,
+            exponentformat="none",
+            showexponent="none",
+        )
+        if scale_millions:
+            figure.update_yaxes(title_text=f"{y} (M FCFA)")
+            hover_template = "%{customdata[0]}<br>Valeur=%{customdata[1]:,.0f} FCFA<extra></extra>"
+        else:
+            hover_template = "%{customdata[0]}<br>Valeur=%{y:,.0f}<extra></extra>"
     figure.update_traces(
-        hovertemplate="%{customdata[0]}<br>Valeur=%{x}" if horizontal else "%{customdata[0]}<br>Valeur=%{y}"
+        marker_color="#7cc4ff",
+        marker_line_color="#dbeafe",
+        marker_line_width=1.2,
+        opacity=0.95,
+        text=chart_df[y].map(
+            lambda value: f"{value:,.1f} M" if scale_millions else f"{value:,.0f}"
+        ),
+        textposition="inside",
+        insidetextanchor="end",
+        textfont=dict(color="#f8fafc", size=12),
+        hovertemplate=hover_template,
     )
     return figure
 
@@ -128,8 +191,10 @@ def build_improved_scatter_chart(dataframe: pd.DataFrame, title: str):
         plot_bgcolor="rgba(0,0,0,0)",
         font_color="#e5e7eb",
         height=520,
-        margin=dict(l=40, r=40, t=50, b=80),
+        margin=dict(l=78, r=32, t=58, b=78),
     )
+    figure.update_xaxes(automargin=True, title_standoff=16, tickfont=dict(size=11))
+    figure.update_yaxes(automargin=True, title_standoff=16, tickfont=dict(size=11))
     return figure
 
 
@@ -249,173 +314,65 @@ top_row_left, top_row_right = st.columns(2)
 with top_row_left:
     st.markdown("## Structure de decision")
     if not structure_df.empty:
-        structure_figure = build_donut_chart(
+        render_decision_split(
             structure_df,
-            names="decision",
-            values="value",
+            label_column="decision",
+            value_column="value",
             title="Structure IMPORT vs LOCAL",
         )
-        if plotly_events is None:
-            st.plotly_chart(structure_figure, use_container_width=True)
-        else:
-            plotly_events(
-                structure_figure,
-                click_event=False,
-                hover_event=False,
-                select_event=False,
-                override_height=420,
-                key="import_structure_chart",
-            )
 
 with top_row_right:
     st.markdown("## CAPEX sans prix Chine")
     if not missing_df.empty:
-        missing_figure = build_improved_bar_chart(
+        render_proportional_bars(
             missing_df,
-            x="famille",
-            y="capex",
+            label_column="famille",
+            value_column="capex",
             title="Familles sans prix Chine",
-            horizontal=True,
+            unit_suffix="FCFA",
         )
-        if plotly_events is None:
-            st.plotly_chart(missing_figure, use_container_width=True)
-        else:
-            selected_missing_points = plotly_events(
-                missing_figure,
-                click_event=True,
-                hover_event=False,
-                select_event=False,
-                override_height=420,
-                key="import_missing_chart",
-            )
-            clicked_family = None
-            if selected_missing_points and selected_missing_points[0].get("customdata"):
-                clicked_family = selected_missing_points[0]["customdata"][0]
-            if selected_missing_points and _apply_chart_filter(
-                "fam_article_id",
-                clicked_family,
-                filter_options.get("familles", []),
-            ):
-                st.rerun()
 
 st.markdown("## Matrice audit sourcing")
 if not coverage_df.empty:
-    coverage_figure = build_improved_scatter_chart(
+    render_sourcing_matrix(
         coverage_df,
+        label_column="famille_label",
         title="Couverture sourcing par famille",
     )
-    if plotly_events is None:
-        st.plotly_chart(coverage_figure, use_container_width=True)
-    else:
-        selected_coverage_points = plotly_events(
-            coverage_figure,
-            click_event=True,
-            hover_event=False,
-            select_event=False,
-            override_height=440,
-            key="import_coverage_chart",
-        )
-        clicked_family = None
-        if selected_coverage_points and selected_coverage_points[0].get("customdata"):
-            clicked_family = selected_coverage_points[0]["customdata"][0]
-        if selected_coverage_points and _apply_chart_filter(
-            "fam_article_id",
-            clicked_family,
-            filter_options.get("familles", []),
-        ):
-            st.rerun()
 
 st.markdown("## Taux import par famille")
 if not import_rate_df.empty:
-    import_rate_figure = build_improved_bar_chart(
+    render_proportional_bars(
         import_rate_df,
-        x="famille_label",
-        y="taux_import",
+        label_column="famille_label",
+        value_column="taux_import",
         title="Taux import par famille",
+        percentage_mode=True,
     )
-    if plotly_events is None:
-        st.plotly_chart(import_rate_figure, use_container_width=True)
-    else:
-        selected_rate_points = plotly_events(
-            import_rate_figure,
-            click_event=True,
-            hover_event=False,
-            select_event=False,
-            override_height=420,
-            key="import_rate_chart",
-        )
-        clicked_family = None
-        if selected_rate_points and selected_rate_points[0].get("customdata"):
-            clicked_family = selected_rate_points[0]["customdata"][0]
-        if selected_rate_points and _apply_chart_filter(
-            "fam_article_id",
-            clicked_family,
-            filter_options.get("familles", []),
-        ):
-            st.rerun()
 
 ventilated_left, ventilated_right = st.columns(2)
 
 with ventilated_left:
     st.markdown("## Importable par batiment")
     if not building_df.empty:
-        building_figure = build_improved_bar_chart(
+        render_proportional_bars(
             building_df,
-            x="batiment",
-            y="capex_importable",
+            label_column="batiment",
+            value_column="capex_importable",
             title="Potentiel importable par batiment",
-            horizontal=True,
+            unit_suffix="FCFA",
         )
-        if plotly_events is None:
-            st.plotly_chart(building_figure, use_container_width=True)
-        else:
-            selected_building_points = plotly_events(
-                building_figure,
-                click_event=True,
-                hover_event=False,
-                select_event=False,
-                override_height=420,
-                key="import_building_chart",
-            )
-            clicked_building = None
-            if selected_building_points and selected_building_points[0].get("customdata"):
-                clicked_building = selected_building_points[0]["customdata"][0]
-            if selected_building_points and _apply_chart_filter(
-                "batiment_id",
-                clicked_building,
-                filter_options.get("batiments", []),
-            ):
-                st.rerun()
 
 with ventilated_right:
     st.markdown("## Importable par niveau")
     if not level_df.empty:
-        level_figure = build_improved_bar_chart(
+        render_proportional_bars(
             level_df,
-            x="niveau",
-            y="capex_importable",
+            label_column="niveau",
+            value_column="capex_importable",
             title="Potentiel importable par niveau",
+            unit_suffix="FCFA",
         )
-        if plotly_events is None:
-            st.plotly_chart(level_figure, use_container_width=True)
-        else:
-            selected_level_points = plotly_events(
-                level_figure,
-                click_event=True,
-                hover_event=False,
-                select_event=False,
-                override_height=420,
-                key="import_level_chart",
-            )
-            clicked_level = None
-            if selected_level_points and selected_level_points[0].get("customdata"):
-                clicked_level = selected_level_points[0]["customdata"][0]
-            if selected_level_points and _apply_chart_filter(
-                "niveau_id",
-                clicked_level,
-                filter_options.get("niveaux", []),
-            ):
-                st.rerun()
 
 st.markdown("## Tableau de controle")
 control_df = build_control_rows(dashboard_data)
@@ -441,6 +398,4 @@ if not detail_df.empty:
     )
     st.dataframe(detail_df, use_container_width=True, height=400, hide_index=True)
 
-st.info(
-    "Vous pouvez cliquer sur les graphiques Famille, Batiment et Niveau pour alimenter les filtres partages."
-)
+st.info("Les graphiques de synthese Import utilisent maintenant un rendu proportionnel stable.")

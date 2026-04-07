@@ -25,9 +25,10 @@ from frontend.api_client import (
 )
 from frontend.ui import (
     apply_dashboard_style,
-    build_bar_chart,
     format_currency,
     render_kpi_cards,
+    render_proportional_bars,
+    render_signed_bars,
     show_api_error,
 )
 
@@ -233,14 +234,12 @@ chart_col_1, chart_col_2 = st.columns(2)
 
 with chart_col_1:
     top_gap_df = lot_comparison_df.sort_values("abs_ecart_ht", ascending=False).head(10)
-    st.plotly_chart(
-        build_bar_chart(
-            top_gap_df,
-            x="lot_code",
-            y="ecart_base_ht_vs_pdf",
-            title="Ecart HT par lot (base analytique - PDF)",
-        ),
-        use_container_width=True,
+    render_signed_bars(
+        top_gap_df,
+        label_column="lot_code",
+        value_column="ecart_base_ht_vs_pdf",
+        title="Ecart HT par lot (base analytique - PDF)",
+        unit_suffix="FCFA",
     )
 
 with chart_col_2:
@@ -253,14 +252,11 @@ with chart_col_2:
             },
         ]
     )
-    st.plotly_chart(
-        build_bar_chart(
-            match_status_df,
-            x="label",
-            y="value",
-            title="Statut de rapprochement des lots",
-        ),
-        use_container_width=True,
+    render_proportional_bars(
+        match_status_df,
+        label_column="label",
+        value_column="value",
+        title="Statut de rapprochement des lots",
     )
 
 st.subheader("Comparaison lot par lot")
@@ -313,15 +309,12 @@ top_article_gaps = (
 )
 
 if not top_article_gaps.empty:
-    st.plotly_chart(
-        build_bar_chart(
-            top_article_gaps,
-            x="designation_normalized",
-            y="ecart_base_ht",
-            title="Plus grands ecarts article/article",
-            horizontal=True,
-        ),
-        use_container_width=True,
+    render_signed_bars(
+        top_article_gaps,
+        label_column="designation_normalized",
+        value_column="ecart_base_ht",
+        title="Plus grands ecarts article/article",
+        unit_suffix="FCFA",
     )
 
 st.subheader("Comparaison article par article")

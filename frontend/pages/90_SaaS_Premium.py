@@ -30,10 +30,46 @@ from frontend.api_client import (
     saas_save_capex_item,
 )
 from frontend.ui import apply_dashboard_style, format_currency, format_percentage
+from frontend.ui import render_decision_split, render_proportional_bars
 
 
 st.set_page_config(page_title="SP2I SaaS Premium", page_icon="PREMIUM", layout="wide")
 apply_dashboard_style("SP2I_Build SaaS Premium")
+
+
+def _frame_chart(figure, horizontal: bool = False, row_count: int = 10):
+    figure.update_layout(
+        paper_bgcolor="rgba(0,0,0,0)",
+        plot_bgcolor="rgba(0,0,0,0)",
+        font_color="#e5e7eb",
+        height=max(420, min(760, 360 + row_count * 12)) if not horizontal else max(440, min(960, 120 + row_count * 34)),
+        margin=dict(
+            l=150 if horizontal else 42,
+            r=32,
+            t=58,
+            b=118 if not horizontal else 40,
+        ),
+        bargap=0.22,
+        coloraxis_showscale=False,
+    )
+    figure.update_xaxes(
+        automargin=True,
+        tickangle=0 if horizontal else -32,
+        title_standoff=16,
+        tickfont=dict(size=11),
+    )
+    figure.update_yaxes(
+        automargin=True,
+        title_standoff=16,
+        tickfont=dict(size=11),
+    )
+    figure.update_traces(
+        marker_color="#7cc4ff",
+        marker_line_color="#dbeafe",
+        marker_line_width=1.2,
+        opacity=0.95,
+    )
+    return figure
 
 
 def initialize_state() -> None:
@@ -205,43 +241,35 @@ top_articles_df = pd.DataFrame(dashboard_payload["charts"]["top_articles"])
 
 with chart_col_1:
     if not capex_by_lot_df.empty:
-        capex_chart = px.bar(
+        render_proportional_bars(
             capex_by_lot_df,
-            x="lot_id",
-            y="value",
+            label_column="lot_id",
+            value_column="value",
             title="CAPEX par lot",
-            color="value",
-            color_continuous_scale=["#0ea5e9", "#22c55e"],
+            unit_suffix="FCFA",
         )
-        st.plotly_chart(capex_chart, use_container_width=True)
     else:
         st.info("Pas encore de donnees CAPEX par lot.")
 
 with chart_col_2:
     if not decision_mix_df.empty:
-        decision_chart = px.pie(
-            decision_mix_df,
-            names="label",
-            values="value",
-            hole=0.55,
+        render_decision_split(
+            decision_mix_df.rename(columns={"label": "decision"}),
+            label_column="decision",
+            value_column="value",
             title="Structure de decision",
-            color="label",
-            color_discrete_sequence=["#00c2ff", "#00f5a0", "#ffb703"],
         )
-        st.plotly_chart(decision_chart, use_container_width=True)
     else:
         st.info("Pas encore de structure IMPORT / LOCAL.")
 
 if not economy_by_family_df.empty:
-    family_chart = px.bar(
+    render_proportional_bars(
         economy_by_family_df,
-        x="label",
-        y="value",
+        label_column="label",
+        value_column="value",
         title="Economie par famille",
-        color="value",
-        color_continuous_scale=["#f59e0b", "#22c55e"],
+        unit_suffix="FCFA",
     )
-    st.plotly_chart(family_chart, use_container_width=True)
 
 st.subheader("Top articles")
 if top_articles_df.empty:

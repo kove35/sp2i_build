@@ -30,7 +30,9 @@ from frontend.ui import (
     apply_dashboard_style,
     format_currency,
     format_percentage,
+    render_decision_split,
     render_kpi_cards,
+    render_proportional_bars,
     show_api_error,
 )
 
@@ -47,7 +49,7 @@ apply_dashboard_style("Dashboard Direction")
 @st.cache_data(show_spinner=False)
 def load_direction_dataframe() -> pd.DataFrame:
     """
-    Charge le dataset unique du dashboard Direction depuis la base analytique.
+    Charge le dataset unique du dashboard Direction depuis la source DQE d'origine enrichie.
     """
     payload, error_message = fetch_direction_dataset()
     if error_message:
@@ -69,7 +71,7 @@ def load_direction_dataframe() -> pd.DataFrame:
         dataframe["decision_label"] = "LOCAL"
 
     if "source_name" not in dataframe.columns:
-        dataframe["source_name"] = "ANALYTICS"
+        dataframe["source_name"] = "PDF_DQE"
 
     return dataframe
 
@@ -195,7 +197,7 @@ def detect_direction_anomalies(dataframe: pd.DataFrame) -> list[str]:
     duplicated_rows = int(dataframe.duplicated(subset=["code_bpu", "designation"]).sum())
     if duplicated_rows:
         anomalies.append(
-            f"Doublons detectes dans la source analytique : {duplicated_rows} lignes sur code_bpu + designation."
+            f"Doublons detectes dans la source DQE : {duplicated_rows} lignes sur code_bpu + designation."
         )
 
     missing_local_amounts = int(dataframe["montant_local"].isna().sum())
@@ -206,14 +208,14 @@ def detect_direction_anomalies(dataframe: pd.DataFrame) -> list[str]:
         unresolved_buildings = int((dataframe["batiment_label"].fillna("Global") == "Global").sum())
         if unresolved_buildings:
             anomalies.append(
-                f"Lignes sans batiment precis : {unresolved_buildings}."
+                f"Lignes sans batiment precis deduit depuis la source DQE : {unresolved_buildings}."
             )
 
     if "niveau_label" in dataframe.columns:
         unresolved_levels = int((dataframe["niveau_label"].fillna("GLOBAL") == "GLOBAL").sum())
         if unresolved_levels:
             anomalies.append(
-                f"Lignes sans niveau precis : {unresolved_levels}."
+                f"Lignes sans niveau precis deduit depuis la source DQE : {unresolved_levels}."
             )
 
     if "optimization_ratio" in dataframe.columns:
@@ -232,6 +234,13 @@ def wrap_labels(series: pd.Series, width: int = 22) -> pd.Series:
     Coupe les libelles longs sur plusieurs lignes.
     """
     return series.fillna("").map(lambda value: "<br>".join(textwrap.wrap(str(value), width=width)) or str(value))
+
+
+def _recommended_chart_height(dataframe: pd.DataFrame, horizontal: bool = False) -> int:
+    row_count = max(len(dataframe.index), 1)
+    if horizontal:
+        return max(440, min(980, 120 + row_count * 34))
+    return max(440, min(780, 360 + row_count * 12))
 
 
 def format_dataframe_for_display(dataframe: pd.DataFrame, numeric_columns: list[str]) -> pd.DataFrame:
@@ -257,14 +266,14 @@ def build_chart_audit_rows(filtered_dataframe: pd.DataFrame) -> pd.DataFrame:
             "Valeur affichee": float(filtered_dataframe["montant_local"].sum()),
         },
         {
-            "Graphique": "Economie par FAMILLE",
-            "Source": float(filtered_dataframe.groupby("famille_label")["economie_line"].sum().sum()),
-            "Valeur affichee": float(filtered_dataframe["economie_line"].sum()),
+            "Graphique": "CAPEX brut par FAMILLE",
+            "Source": float(filtered_dataframe.groupby("famille_label")["montant_local"].sum().sum()),
+            "Valeur affichee": float(filtered_dataframe["montant_local"].sum()),
         },
         {
-            "Graphique": "Structure IMPORT / LOCAL",
-            "Source": float(filtered_dataframe.groupby("decision_label")["capex_optimise_line"].sum().sum()),
-            "Valeur affichee": float(filtered_dataframe["capex_optimise_line"].sum()),
+            "Graphique": "Structure IMPORT / LOCAL sur CAPEX brut",
+            "Source": float(filtered_dataframe.groupby("decision_label")["montant_local"].sum().sum()),
+            "Valeur affichee": float(filtered_dataframe["montant_local"].sum()),
         },
     ]
     audit_dataframe = pd.DataFrame(rows)
@@ -367,6 +376,7 @@ def build_bar_figure(
     title: str,
     selected_value: str | None = None,
     horizontal: bool = False,
+    scale_millions: bool = False,
 ):
     """
     Construit un graphique a barres avec mise en evidence de la selection.
@@ -374,6 +384,12 @@ def build_bar_figure(
     chart_dataframe = dataframe.copy()
     chart_dataframe["is_selected"] = chart_dataframe[x].eq(selected_value)
     chart_dataframe[f"{x}_display"] = wrap_labels(chart_dataframe[x], width=20)
+    original_value_column = "_original_value"
+    if scale_millions and y in chart_dataframe.columns:
+        chart_dataframe[original_value_column] = pd.to_numeric(
+            chart_dataframe[y], errors="coerce"
+        ).fillna(0.0)
+        chart_dataframe[y] = chart_dataframe[original_value_column] / 1_000_000
 
     if horizontal:
         figure = px.bar(
@@ -384,7 +400,7 @@ def build_bar_figure(
             title=title,
             color="is_selected",
             color_discrete_map={True: "#22c55e", False: "#0ea5e9"},
-            custom_data=[x],
+            custom_data=[x, original_value_column] if scale_millions else [x],
         )
     else:
         figure = px.bar(
@@ -394,21 +410,70 @@ def build_bar_figure(
             title=title,
             color="is_selected",
             color_discrete_map={True: "#22c55e", False: "#0ea5e9"},
-            custom_data=[x],
+            custom_data=[x, original_value_column] if scale_millions else [x],
         )
 
     figure.update_layout(
         paper_bgcolor="rgba(0,0,0,0)",
         plot_bgcolor="rgba(0,0,0,0)",
         font_color="#e5e7eb",
-        height=500,
-        margin=dict(l=40, r=40, t=50, b=150 if not horizontal else 40),
+        height=_recommended_chart_height(chart_dataframe, horizontal=horizontal),
+        margin=dict(
+            l=150 if horizontal else 42,
+            r=32,
+            t=58,
+            b=118 if not horizontal else 40,
+        ),
         showlegend=False,
-        xaxis_tickangle=-45 if not horizontal else 0,
+        xaxis_tickangle=-32 if not horizontal else 0,
+        bargap=0.22,
+        uniformtext_minsize=10,
+        uniformtext_mode="hide",
     )
-    figure.update_traces(
-        hovertemplate="%{customdata[0]}<br>Valeur=%{x}" if horizontal else "%{customdata[0]}<br>Valeur=%{y}",
+    figure.update_xaxes(
+        automargin=True,
+        title_standoff=16,
+        tickfont=dict(size=11),
+        gridcolor="rgba(148, 163, 184, 0.18)",
     )
+    figure.update_yaxes(
+        automargin=True,
+        title_standoff=16,
+        tickfont=dict(size=11),
+        gridcolor="rgba(148, 163, 184, 0.12)",
+    )
+    if horizontal:
+        figure.update_xaxes(
+            tickformat=",.0f",
+            separatethousands=True,
+            exponentformat="none",
+            showexponent="none",
+        )
+        if scale_millions:
+            figure.update_xaxes(title_text=f"{y} (M FCFA)")
+            figure.update_traces(
+                hovertemplate="%{customdata[0]}<br>Valeur=%{customdata[1]:,.0f} FCFA<extra></extra>",
+            )
+        else:
+            figure.update_traces(
+                hovertemplate="%{customdata[0]}<br>Valeur=%{x:,.0f}<extra></extra>",
+            )
+    else:
+        figure.update_yaxes(
+            tickformat=",.0f",
+            separatethousands=True,
+            exponentformat="none",
+            showexponent="none",
+        )
+        if scale_millions:
+            figure.update_yaxes(title_text=f"{y} (M FCFA)")
+            figure.update_traces(
+                hovertemplate="%{customdata[0]}<br>Valeur=%{customdata[1]:,.0f} FCFA<extra></extra>",
+            )
+        else:
+            figure.update_traces(
+                hovertemplate="%{customdata[0]}<br>Valeur=%{y:,.0f}<extra></extra>",
+            )
     return figure
 
 
@@ -429,8 +494,8 @@ def build_pie_figure(dataframe: pd.DataFrame, title: str):
         paper_bgcolor="rgba(0,0,0,0)",
         plot_bgcolor="rgba(0,0,0,0)",
         font_color="#e5e7eb",
-        height=500,
-        margin=dict(l=40, r=40, t=50, b=40),
+        height=460,
+        margin=dict(l=32, r=32, t=58, b=32),
     )
     return figure
 
@@ -555,20 +620,20 @@ with control_col_2:
 
 filtered_dataframe = filter_data(source_dataframe)
 kpis = compute_kpis(filtered_dataframe)
-st.success("Source unique du dashboard Direction : base analytique partagee avec l'accueil, Chantier et Import.")
-st.info("Les KPI et graphiques de cette page utilisent maintenant la meme source de verite que les autres dashboards.")
+st.success("Source de reference du dashboard Direction : DQE d'origine enrichi pour le drill-down.")
+st.info("Les montants affiches dans les graphiques Direction sont ancres sur le CAPEX brut de la source DQE.")
 
 render_kpi_cards(
     [
         {
             "label": "CAPEX Brut",
             "value": format_currency(kpis["capex_brut"]),
-            "caption": "Source KPI : base analytique",
+            "caption": "Source KPI : DQE d'origine",
         },
         {
             "label": "CAPEX Optimise",
             "value": format_currency(kpis["capex_opt"]),
-            "caption": "Scenario calcule sur la meme base analytique",
+            "caption": "Projection IMPORT / LOCAL sur la source DQE",
         },
         {
             "label": "Economie",
@@ -594,7 +659,7 @@ st.info(
 
 anomalies = detect_direction_anomalies(source_dataframe)
 with st.expander("Audit rapide des donnees source", expanded=False):
-    st.caption("Source auditee : dataset analytique unifie du dashboard Direction.")
+    st.caption("Source auditee : dataset DQE d'origine enrichi pour le dashboard Direction.")
     if anomalies:
         for anomaly in anomalies:
             st.warning(anomaly)
@@ -630,109 +695,69 @@ decision_dataframe = (
 chart_col_1, chart_col_2 = st.columns(2)
 
 with chart_col_1:
-    st.markdown("## Analyse par LOT")
-    selected_lot_points = plotly_events(
-        build_bar_figure(
-            lot_dataframe,
-            x="lot_label",
-            y="capex",
-            title="CAPEX par lot",
-            selected_value=filters["lot"],
-        ),
-        click_event=True,
-        hover_event=False,
-        select_event=False,
-        override_height=420,
-        key="plotly_lot_events",
+    render_proportional_bars(
+        lot_dataframe,
+        label_column="lot_label",
+        value_column="capex",
+        title="Analyse par LOT",
+        unit_suffix="FCFA",
     )
 
 with chart_col_2:
-    st.markdown("#### Structure de decision")
-    plotly_events(
-        build_pie_figure(decision_dataframe, "IMPORT vs LOCAL"),
-        click_event=False,
-        hover_event=False,
-        select_event=False,
-        override_height=420,
-        key="plotly_decision_events",
+    render_decision_split(
+        decision_dataframe.rename(columns={"decision_label": "decision"}),
+        label_column="decision",
+        value_column="value",
+        title="Structure de decision",
     )
-
-if selected_lot_points:
-    apply_click_selection(selected_lot_points, "lot")
-    st.rerun()
 
 famille_section_df = filter_data(source_dataframe)
 famille_dataframe = (
     famille_section_df.groupby("famille_label", as_index=False)
-    .agg(economie=("economie_line", "sum"))
-    .sort_values("economie", ascending=False)
+    .agg(capex=("montant_local", "sum"))
+    .sort_values("capex", ascending=False)
 )
 
-st.markdown("## Analyse par FAMILLE")
-selected_famille_points = plotly_events(
-    build_bar_figure(
-        famille_dataframe,
-        x="famille_label",
-        y="economie",
-        title="Economie par famille",
-        selected_value=filters["famille"],
-    ),
-    click_event=True,
-    hover_event=False,
-    select_event=False,
-    override_height=420,
-    key="plotly_famille_events",
+render_proportional_bars(
+    famille_dataframe,
+    label_column="famille_label",
+    value_column="capex",
+    title="Analyse par FAMILLE",
+    unit_suffix="FCFA",
 )
-
-if selected_famille_points:
-    apply_click_selection(selected_famille_points, "famille")
-    st.rerun()
 
 article_section_df = filter_data(source_dataframe)
 article_dataframe = (
     article_section_df.groupby("designation", as_index=False)
-    .agg(economie=("economie_line", "sum"))
-    .sort_values("economie", ascending=False)
+    .agg(capex=("montant_local", "sum"))
+    .sort_values("capex", ascending=False)
     .head(int(filters["top_n"]))
 )
 
-st.markdown("## Analyse par ARTICLE")
-selected_article_points = plotly_events(
-    build_bar_figure(
-        article_dataframe,
-        x="designation",
-        y="economie",
-        title="Economie par article",
-        selected_value=filters["article"],
-        horizontal=True,
-    ),
-    click_event=True,
-    hover_event=False,
-    select_event=False,
-    override_height=500,
-    key="plotly_article_events",
+render_proportional_bars(
+    article_dataframe,
+    label_column="designation",
+    value_column="capex",
+    title="Analyse par ARTICLE",
+    unit_suffix="FCFA",
 )
 
-if selected_article_points:
-    apply_click_selection(selected_article_points, "article")
-    st.rerun()
-
-st.markdown("## Top articles import")
+st.markdown("## Top articles de la source")
 current_filtered_dataframe = filter_data(source_dataframe)
 top_articles_dataframe = (
-    current_filtered_dataframe[current_filtered_dataframe["decision_label"] == "IMPORT"]
+    current_filtered_dataframe
     .groupby(["code_bpu", "designation"], as_index=False)
     .agg(
         capex_brut=("montant_local", "sum"),
         capex_optimise=("capex_optimise_line", "sum"),
         economie=("economie_line", "sum"),
     )
-    .sort_values("economie", ascending=False)
+    .sort_values("capex_brut", ascending=False)
     .head(int(filters["top_n"]))
 )
 
 if top_articles_dataframe.empty:
-    st.info("Aucun article IMPORT dans le perimetre courant.")
+    st.info("Aucun article disponible dans le perimetre courant.")
 else:
     top_articles_display = format_dataframe_for_display(
         top_articles_dataframe.sort_values("economie", ascending=False),
@@ -757,3 +782,5 @@ st.dataframe(
     height=220,
     hide_index=True,
 )
+
+st.info("Les graphiques de synthese Direction utilisent maintenant un rendu proportionnel stable.")

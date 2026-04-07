@@ -26,11 +26,11 @@ from frontend.api_client import (
 )
 from frontend.ui import (
     apply_dashboard_style,
-    build_bar_chart,
-    build_donut_chart,
     format_currency,
     format_percentage,
+    render_decision_split,
     render_kpi_cards,
+    render_proportional_bars,
     show_api_error,
 )
 
@@ -383,40 +383,32 @@ chart_col_1, chart_col_2 = st.columns(2)
 with chart_col_1:
     capex_by_lot = pd.DataFrame(dashboard_payload["charts"]["capex_by_lot"])
     if not capex_by_lot.empty:
-        st.plotly_chart(
-            build_bar_chart(
-                capex_by_lot,
-                x="lot_id",
-                y="value",
-                title="CAPEX par lot",
-            ),
-            use_container_width=True,
+        render_proportional_bars(
+            capex_by_lot,
+            label_column="lot_id",
+            value_column="value",
+            title="CAPEX par lot",
+            unit_suffix="FCFA",
         )
 
 with chart_col_2:
     decision_mix = pd.DataFrame(dashboard_payload["charts"]["decision_mix"])
     if not decision_mix.empty:
-        st.plotly_chart(
-            build_donut_chart(
-                decision_mix,
-                names="label",
-                values="value",
-                title="Structure de decision",
-            ),
-            use_container_width=True,
+        render_decision_split(
+            decision_mix.rename(columns={"label": "decision"}),
+            label_column="decision",
+            value_column="value",
+            title="Structure de decision",
         )
 
 family_chart_df = pd.DataFrame(dashboard_payload["charts"]["economy_by_family"])
 if not family_chart_df.empty:
-    st.plotly_chart(
-        build_bar_chart(
-            family_chart_df.head(15),
-            x="label",
-            y="value",
-            title="Economie par famille",
-            horizontal=True,
-        ),
-        use_container_width=True,
+    render_proportional_bars(
+        family_chart_df.head(15),
+        label_column="label",
+        value_column="value",
+        title="Economie par famille",
+        unit_suffix="FCFA",
     )
 
 st.subheader("Top articles")

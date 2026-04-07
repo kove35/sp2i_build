@@ -26,7 +26,9 @@ from frontend.ui import (
     format_currency,
     format_percentage,
     render_active_filters,
+    render_heat_grid,
     render_kpi_cards,
+    render_proportional_bars,
     render_sidebar_filters,
     show_api_error,
 )
@@ -62,15 +64,27 @@ def wrap_labels(series: pd.Series, width: int = 22) -> pd.Series:
     return series.fillna("").map(lambda value: "<br>".join(textwrap.wrap(str(value), width=width)) or str(value))
 
 
+def _recommended_chart_height(dataframe: pd.DataFrame, horizontal: bool = False) -> int:
+    row_count = max(len(dataframe.index), 1)
+    if horizontal:
+        return max(440, min(980, 120 + row_count * 34))
+    return max(440, min(780, 360 + row_count * 12))
+
+
 def build_improved_bar_chart(
     dataframe: pd.DataFrame,
     x: str,
     y: str,
     title: str,
     horizontal: bool = False,
+    scale_millions: bool = False,
 ):
     chart_df = dataframe.copy()
     chart_df[f"{x}_display"] = wrap_labels(chart_df[x], width=20)
+    original_value_column = "_original_value"
+    if scale_millions and y in chart_df.columns:
+        chart_df[original_value_column] = pd.to_numeric(chart_df[y], errors="coerce").fillna(0.0)
+        chart_df[y] = chart_df[original_value_column] / 1_000_000
 
     if horizontal:
         figure = px.bar(
@@ -79,9 +93,7 @@ def build_improved_bar_chart(
             y=f"{x}_display",
             orientation="h",
             title=title,
-            color=y,
-            color_continuous_scale=["#0ea5e9", "#22c55e"],
-            custom_data=[x],
+            custom_data=[x, original_value_column] if scale_millions else [x],
         )
     else:
         figure = px.bar(
@@ -89,22 +101,73 @@ def build_improved_bar_chart(
             x=f"{x}_display",
             y=y,
             title=title,
-            color=y,
-            color_continuous_scale=["#0ea5e9", "#22c55e"],
-            custom_data=[x],
+            custom_data=[x, original_value_column] if scale_millions else [x],
         )
 
     figure.update_layout(
         paper_bgcolor="rgba(0,0,0,0)",
         plot_bgcolor="rgba(0,0,0,0)",
         font_color="#e5e7eb",
-        coloraxis_showscale=False,
-        height=500,
-        margin=dict(l=40, r=40, t=50, b=150 if not horizontal else 40),
-        xaxis_tickangle=-45 if not horizontal else 0,
+        height=_recommended_chart_height(chart_df, horizontal=horizontal),
+        margin=dict(
+            l=150 if horizontal else 42,
+            r=32,
+            t=58,
+            b=118 if not horizontal else 40,
+        ),
+        xaxis_tickangle=-32 if not horizontal else 0,
+        bargap=0.22,
+        uniformtext_minsize=10,
+        uniformtext_mode="hide",
     )
+    figure.update_xaxes(
+        automargin=True,
+        title_standoff=16,
+        tickfont=dict(size=11),
+        gridcolor="rgba(148, 163, 184, 0.18)",
+    )
+    figure.update_yaxes(
+        automargin=True,
+        title_standoff=16,
+        tickfont=dict(size=11),
+        gridcolor="rgba(148, 163, 184, 0.12)",
+    )
+    if horizontal:
+        figure.update_xaxes(
+            tickformat=",.0f",
+            separatethousands=True,
+            exponentformat="none",
+            showexponent="none",
+        )
+        if scale_millions:
+            figure.update_xaxes(title_text=f"{y} (M FCFA)")
+            hover_template = "%{customdata[0]}<br>Valeur=%{customdata[1]:,.0f} FCFA<extra></extra>"
+        else:
+            hover_template = "%{customdata[0]}<br>Valeur=%{x:,.0f}<extra></extra>"
+    else:
+        figure.update_yaxes(
+            tickformat=",.0f",
+            separatethousands=True,
+            exponentformat="none",
+            showexponent="none",
+        )
+        if scale_millions:
+            figure.update_yaxes(title_text=f"{y} (M FCFA)")
+            hover_template = "%{customdata[0]}<br>Valeur=%{customdata[1]:,.0f} FCFA<extra></extra>"
+        else:
+            hover_template = "%{customdata[0]}<br>Valeur=%{y:,.0f}<extra></extra>"
     figure.update_traces(
-        hovertemplate="%{customdata[0]}<br>Valeur=%{x}" if horizontal else "%{customdata[0]}<br>Valeur=%{y}"
+        marker_color="#7cc4ff",
+        marker_line_color="#dbeafe",
+        marker_line_width=1.2,
+        opacity=0.95,
+        text=chart_df[y].map(
+            lambda value: f"{value:,.1f} M" if scale_millions else f"{value:,.0f}"
+        ),
+        textposition="inside",
+        insidetextanchor="end",
+        textfont=dict(color="#f8fafc", size=12),
+        hovertemplate=hover_template,
     )
     return figure
 
@@ -128,10 +191,11 @@ def build_improved_heatmap(dataframe: pd.DataFrame, row: str, column: str, value
         paper_bgcolor="rgba(0,0,0,0)",
         plot_bgcolor="rgba(0,0,0,0)",
         font_color="#e5e7eb",
-        height=520,
-        margin=dict(l=40, r=40, t=50, b=120),
+        height=max(480, min(920, 180 + len(pivot_table.index) * 26)),
+        margin=dict(l=110, r=32, t=58, b=108),
     )
-    figure.update_xaxes(tickangle=-45)
+    figure.update_xaxes(automargin=True, tickangle=-32, tickfont=dict(size=11))
+    figure.update_yaxes(automargin=True, tickfont=dict(size=11))
     return figure
 
 
@@ -223,103 +287,44 @@ top_row_left, top_row_right = st.columns(2)
 with top_row_left:
     st.markdown("## Analyse par LOT")
     if not lot_df.empty:
-        lot_figure = build_improved_bar_chart(
+        render_proportional_bars(
             lot_df,
-            x="lot",
-            y="capex",
+            label_column="lot",
+            value_column="capex",
             title="Cout total par lot",
+            unit_suffix="FCFA",
         )
-        if plotly_events is None:
-            st.plotly_chart(lot_figure, use_container_width=True)
-        else:
-            selected_lot_points = plotly_events(
-                lot_figure,
-                click_event=True,
-                hover_event=False,
-                select_event=False,
-                override_height=420,
-                key="chantier_lot_chart",
-            )
-            clicked_lot = None
-            if selected_lot_points and selected_lot_points[0].get("customdata"):
-                clicked_lot = selected_lot_points[0]["customdata"][0]
-            if selected_lot_points and _apply_chart_filter(
-                "lot_id",
-                clicked_lot,
-                filter_options.get("lots", []),
-            ):
-                st.rerun()
 
 with top_row_right:
     st.markdown("## Analyse par BÂTIMENT")
     if not building_df.empty:
-        building_figure = build_improved_bar_chart(
+        render_proportional_bars(
             building_df,
-            x="batiment",
-            y="capex",
+            label_column="batiment",
+            value_column="capex",
             title="Cout par batiment",
+            unit_suffix="FCFA",
         )
-        if plotly_events is None:
-            st.plotly_chart(building_figure, use_container_width=True)
-        else:
-            selected_building_points = plotly_events(
-                building_figure,
-                click_event=True,
-                hover_event=False,
-                select_event=False,
-                override_height=420,
-                key="chantier_building_chart",
-            )
-            clicked_building = None
-            if selected_building_points and selected_building_points[0].get("customdata"):
-                clicked_building = selected_building_points[0]["customdata"][0]
-            if selected_building_points and _apply_chart_filter(
-                "batiment_id",
-                clicked_building,
-                filter_options.get("batiments", []),
-            ):
-                st.rerun()
 
 st.markdown("## Analyse par NIVEAU")
 if not level_df.empty:
-    level_figure = build_improved_bar_chart(
+    render_proportional_bars(
         level_df,
-        x="niveau",
-        y="capex",
+        label_column="niveau",
+        value_column="capex",
         title="Cout par niveau",
+        unit_suffix="FCFA",
     )
-    if plotly_events is None:
-        st.plotly_chart(level_figure, use_container_width=True)
-    else:
-        selected_level_points = plotly_events(
-            level_figure,
-            click_event=True,
-            hover_event=False,
-            select_event=False,
-            override_height=420,
-            key="chantier_level_chart",
-        )
-        clicked_level = None
-        if selected_level_points and selected_level_points[0].get("customdata"):
-            clicked_level = selected_level_points[0]["customdata"][0]
-        if selected_level_points and _apply_chart_filter(
-            "niveau_id",
-            clicked_level,
-            filter_options.get("niveaux", []),
-        ):
-            st.rerun()
 
 st.markdown("## Répartition LOT x NIVEAU")
 if not lot_level_df.empty:
-    st.plotly_chart(
-        build_improved_heatmap(
-            lot_level_df,
-            row="lot_label",
-            column="niveau_label",
-            value="capex",
-            title="Repartition CAPEX par lot et niveau",
-        ),
-        use_container_width=True,
+    render_heat_grid(
+        lot_level_df,
+        row_column="lot_label",
+        column_column="niveau_label",
+        value_column="capex",
+        title="Repartition CAPEX par lot et niveau",
+        unit_suffix="FCFA",
     )
 
 st.markdown("## Tableau de contrôle")
@@ -340,6 +345,4 @@ if not detail_df.empty:
     detail_df["CAPEX"] = detail_df["CAPEX"].map(lambda value: f"{value:,.0f}".replace(",", " "))
     st.dataframe(detail_df, use_container_width=True, height=400, hide_index=True)
 
-st.info(
-    "Vous pouvez cliquer sur les graphiques Lot, Batiment et Niveau pour alimenter les filtres partages."
-)
+st.info("Les graphiques de synthese Chantier utilisent maintenant un rendu proportionnel stable.")

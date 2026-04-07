@@ -10,8 +10,8 @@ import streamlit as st
 from frontend.api_client import erp_fetch_dashboard, erp_fetch_filters, erp_fetch_status
 from frontend.ui import (
     apply_dashboard_style,
-    build_bar_chart,
     format_currency,
+    render_proportional_bars,
     render_kpi_cards,
     show_api_error,
 )
@@ -113,41 +113,34 @@ render_kpi_cards(
 st.markdown("## Analyse par batiment")
 batiment_df = pd.DataFrame(charts.get("budget_par_batiment", []))
 if not batiment_df.empty:
-    st.plotly_chart(
-        build_bar_chart(
-            batiment_df,
-            x="batiment_label",
-            y="montant_total_ht",
-            title="Budget par batiment",
-        ),
-        use_container_width=True,
+    render_proportional_bars(
+        batiment_df,
+        label_column="batiment_label",
+        value_column="montant_total_ht",
+        title="Budget par batiment",
+        unit_suffix="FCFA",
     )
 
 st.markdown("## Analyse par niveau")
 niveau_df = pd.DataFrame(charts.get("budget_par_niveau", []))
 if not niveau_df.empty:
-    st.plotly_chart(
-        build_bar_chart(
-            niveau_df,
-            x="niveau_label",
-            y="montant_total_ht",
-            title="Budget par niveau",
-        ),
-        use_container_width=True,
+    render_proportional_bars(
+        niveau_df,
+        label_column="niveau_label",
+        value_column="montant_total_ht",
+        title="Budget par niveau",
+        unit_suffix="FCFA",
     )
 
 st.markdown("## Analyse par lot")
 lot_df = pd.DataFrame(charts.get("budget_par_lot", []))
 if not lot_df.empty:
-    st.plotly_chart(
-        build_bar_chart(
-            lot_df,
-            x="lot_label",
-            y="montant_total_ht",
-            title="Budget par lot",
-            horizontal=True,
-        ),
-        use_container_width=True,
+    render_proportional_bars(
+        lot_df,
+        label_column="lot_label",
+        value_column="montant_total_ht",
+        title="Budget par lot",
+        unit_suffix="FCFA",
     )
 
 st.markdown("## Detail hiérarchique")

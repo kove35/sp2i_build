@@ -190,7 +190,7 @@ class DashboardService:
         Retourne les lignes detaillees du dashboard Direction.
         Le frontend peut ensuite appliquer ses propres filtres interactifs.
         """
-        dataframe = self._load_dashboard_dataframe(DashboardFilters())
+        dataframe = self._load_direction_kpi_dataframe(DashboardFilters())
         clean_dataframe = dataframe.copy()
         clean_dataframe = clean_dataframe.replace([np.inf, -np.inf], None)
         clean_dataframe = clean_dataframe.where(pd.notna(clean_dataframe), None)
@@ -198,20 +198,16 @@ class DashboardService:
 
     def get_direction_kpi_dataset(self) -> dict:
         """
-        Retourne le dataset detaille du dashboard Direction.
-
-        Toutes les pages historiques s'alignent sur la meme source de verite
-        analytique afin d'eviter des KPI divergents entre l'accueil, Direction,
-        Chantier et Import.
+        Retourne le dataset detaille du dashboard Direction ancre sur la source DQE.
         """
-        dataframe = self._load_dashboard_dataframe(DashboardFilters())
+        dataframe = self._load_direction_kpi_dataframe(DashboardFilters())
         clean_dataframe = dataframe.copy()
         clean_dataframe = clean_dataframe.replace([np.inf, -np.inf], None)
         clean_dataframe = clean_dataframe.where(pd.notna(clean_dataframe), None)
         return {"items": json.loads(clean_dataframe.to_json(orient="records"))}
 
     def get_direction_dashboard(self, filters: DashboardFilters) -> dict:
-        dataframe = self._load_dashboard_dataframe(filters)
+        dataframe = self._load_direction_kpi_dataframe(filters)
 
         return {
             "dashboard": "direction",
@@ -221,33 +217,33 @@ class DashboardService:
                 "repartition_local_import": self._group_sum(
                     dataframe,
                     group_column="decision_label",
-                    value_column="capex_optimise_line",
+                    value_column="montant_local",
                     label_column="decision",
                     value_label="value",
                 ),
-                "economie_par_famille": self._group_sum(
+                "capex_brut_par_famille": self._group_sum(
                     dataframe,
                     group_column="famille_label",
-                    value_column="economie_line",
+                    value_column="montant_local",
                     label_column="famille",
-                    value_label="economie",
+                    value_label="capex",
                 ),
                 "capex_par_lot": self._group_sum(
                     dataframe,
                     group_column="lot_label",
-                    value_column="capex_optimise_line",
+                    value_column="montant_local",
                     label_column="lot",
                     value_label="capex",
                 ),
-                "top_articles_rentables": (
-                    dataframe[dataframe["decision_label"] == "IMPORT"]
+                "top_articles_source": (
+                    dataframe
                     .groupby(["code_bpu", "designation"], as_index=False)
                     .agg(
-                        economie=("economie_line", "sum"),
                         capex_brut=("montant_local", "sum"),
                         capex_optimise=("capex_optimise_line", "sum"),
+                        economie=("economie_line", "sum"),
                     )
-                    .sort_values("economie", ascending=False)
+                    .sort_values("capex_brut", ascending=False)
                     .head(10)
                     .to_dict(orient="records")
                 ),

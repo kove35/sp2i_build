@@ -24,11 +24,11 @@ from frontend.api_client import (
 )
 from frontend.ui import (
     apply_dashboard_style,
-    build_bar_chart,
-    build_donut_chart,
     format_currency,
     format_percentage,
     render_active_filters,
+    render_decision_split,
+    render_proportional_bars,
     render_kpi_cards,
     render_sidebar_filters,
     show_api_error,
@@ -118,12 +118,12 @@ render_kpi_cards(
         {
             "label": "CAPEX Brut",
             "value": format_currency(direction_kpis["capex_brut"]),
-            "caption": "Reference 100% locale",
+            "caption": "Source DQE d'origine",
         },
         {
             "label": "CAPEX Optimise",
             "value": format_currency(direction_kpis["capex_optimise"]),
-            "caption": "Scenario arbitre",
+            "caption": "Projection IMPORT / LOCAL",
         },
         {
             "label": "Economie Globale",
@@ -143,106 +143,54 @@ top_left, top_right = st.columns(2)
 with top_left:
     decision_df = pd.DataFrame(direction_data["charts"]["repartition_local_import"])
     if not decision_df.empty:
-        decision_figure = build_donut_chart(
+        render_decision_split(
             decision_df,
-            names="decision",
-            values="value",
-            title="Structure de decision",
+            label_column="decision",
+            value_column="value",
+            title="Structure de decision sur CAPEX brut source",
         )
-        if plotly_events is None:
-            st.plotly_chart(decision_figure, use_container_width=True)
-        else:
-            plotly_events(
-                decision_figure,
-                click_event=False,
-                hover_event=False,
-                select_event=False,
-                override_height=420,
-                key="home_decision_chart",
-            )
 
 with top_right:
     lot_df = pd.DataFrame(direction_data["charts"]["capex_par_lot"])
     if not lot_df.empty:
-        lot_figure = build_bar_chart(
+        render_proportional_bars(
             lot_df.head(10),
-            x="lot",
-            y="capex",
-            title="Top lots par CAPEX optimise",
+            label_column="lot",
+            value_column="capex",
+            title="Top lots par CAPEX brut source",
+            unit_suffix="FCFA",
         )
-        if plotly_events is None:
-            st.plotly_chart(lot_figure, use_container_width=True)
-        else:
-            selected_lot_points = plotly_events(
-                lot_figure,
-                click_event=True,
-                hover_event=False,
-                select_event=False,
-                override_height=420,
-                key="home_lot_chart",
-            )
-            if selected_lot_points and _apply_chart_filter(
-                "lot_id",
-                selected_lot_points[0].get("x"),
-                filter_options.get("lots", []),
-            ):
-                st.rerun()
 
 middle_left, middle_right = st.columns(2)
 
 with middle_left:
-    family_df = pd.DataFrame(direction_data["charts"]["economie_par_famille"])
+    family_df = pd.DataFrame(direction_data["charts"]["capex_brut_par_famille"])
     if not family_df.empty:
-        family_figure = build_bar_chart(
+        render_proportional_bars(
             family_df.head(10),
-            x="famille",
-            y="economie",
-            title="Economies par famille",
-            horizontal=True,
+            label_column="famille",
+            value_column="capex",
+            title="CAPEX brut par famille",
+            unit_suffix="FCFA",
         )
-        if plotly_events is None:
-            st.plotly_chart(family_figure, use_container_width=True)
-        else:
-            selected_family_points = plotly_events(
-                family_figure,
-                click_event=True,
-                hover_event=False,
-                select_event=False,
-                override_height=420,
-                key="home_family_chart",
-            )
-            clicked_family = None
-            if selected_family_points:
-                clicked_family = selected_family_points[0].get("y")
-                if clicked_family is None and selected_family_points[0].get("customdata"):
-                    clicked_family = selected_family_points[0]["customdata"][0]
-
-            if selected_family_points and _apply_chart_filter(
-                "fam_article_id",
-                clicked_family,
-                filter_options.get("familles", []),
-            ):
-                st.rerun()
 
 with middle_right:
     import_rate_df = pd.DataFrame(import_data["charts"]["taux_import_par_famille"])
     if not import_rate_df.empty:
-        st.plotly_chart(
-            build_bar_chart(
-                import_rate_df.head(10),
-                x="famille_label",
-                y="taux_import",
-                title="Taux import par famille",
-            ),
-            use_container_width=True,
+        render_proportional_bars(
+            import_rate_df.head(10),
+            label_column="famille_label",
+            value_column="taux_import",
+            title="Taux import par famille",
+            percentage_mode=True,
         )
 
-st.subheader("Vue rapide des opportunites")
-top_articles_df = pd.DataFrame(direction_data["charts"]["top_articles_rentables"])
+st.subheader("Vue rapide de la source")
+top_articles_df = pd.DataFrame(direction_data["charts"]["top_articles_source"])
 if not top_articles_df.empty:
     st.dataframe(top_articles_df.head(10), use_container_width=True, hide_index=True)
 
 st.info(
     "Les filtres choisis dans la barre laterale sont partages entre l'accueil et les 3 dashboards. "
-    "Vous pouvez aussi cliquer sur les graphiques Lot et Economies par famille pour alimenter ces filtres."
+    "Sur l'accueil, le pilotage par clic reste desactive tant que le rendu des graphiques n'est pas stabilise."
 )
