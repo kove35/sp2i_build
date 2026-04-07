@@ -35,6 +35,15 @@ from frontend.ui import (
 )
 
 
+def _get_chart_items(payload: dict, *keys: str) -> list[dict]:
+    charts = payload.get("charts", {}) if isinstance(payload, dict) else {}
+    for key in keys:
+        items = charts.get(key)
+        if isinstance(items, list):
+            return items
+    return []
+
+
 def _option_lookup(options: list[dict]) -> dict[str, object]:
     return {str(option["label"]): option["value"] for option in options}
 
@@ -141,7 +150,13 @@ render_kpi_cards(
 top_left, top_right = st.columns(2)
 
 with top_left:
-    decision_df = pd.DataFrame(direction_data["charts"]["repartition_local_import"])
+    decision_df = pd.DataFrame(
+        _get_chart_items(
+            direction_data,
+            "repartition_local_import",
+            "structure_decision",
+        )
+    )
     if not decision_df.empty:
         render_decision_split(
             decision_df,
@@ -151,7 +166,7 @@ with top_left:
         )
 
 with top_right:
-    lot_df = pd.DataFrame(direction_data["charts"]["capex_par_lot"])
+    lot_df = pd.DataFrame(_get_chart_items(direction_data, "capex_par_lot"))
     if not lot_df.empty:
         render_proportional_bars(
             lot_df.head(10),
@@ -164,7 +179,13 @@ with top_right:
 middle_left, middle_right = st.columns(2)
 
 with middle_left:
-    family_df = pd.DataFrame(direction_data["charts"]["capex_brut_par_famille"])
+    family_df = pd.DataFrame(
+        _get_chart_items(
+            direction_data,
+            "capex_brut_par_famille",
+            "capex_par_famille",
+        )
+    )
     if not family_df.empty:
         render_proportional_bars(
             family_df.head(10),
@@ -175,7 +196,7 @@ with middle_left:
         )
 
 with middle_right:
-    import_rate_df = pd.DataFrame(import_data["charts"]["taux_import_par_famille"])
+    import_rate_df = pd.DataFrame(_get_chart_items(import_data, "taux_import_par_famille"))
     if not import_rate_df.empty:
         render_proportional_bars(
             import_rate_df.head(10),
@@ -186,7 +207,7 @@ with middle_right:
         )
 
 st.subheader("Vue rapide de la source")
-top_articles_df = pd.DataFrame(direction_data["charts"]["top_articles_source"])
+top_articles_df = pd.DataFrame(_get_chart_items(direction_data, "top_articles_source"))
 if not top_articles_df.empty:
     st.dataframe(top_articles_df.head(10), use_container_width=True, hide_index=True)
 
