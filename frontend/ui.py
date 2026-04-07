@@ -8,7 +8,6 @@ import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
 import streamlit as st
-import streamlit.components.v1 as components
 
 
 def _recommended_chart_height(dataframe: pd.DataFrame, horizontal: bool = False) -> int:
@@ -195,7 +194,7 @@ def render_proportional_bars(
             {''.join(rows_html)}
         </div>
     """
-    components.html(html, height=max(320, 72 + len(chart_dataframe.index) * 54), scrolling=False)
+    st.markdown(html, unsafe_allow_html=True)
 
 
 def render_decision_split(
@@ -307,7 +306,7 @@ def render_decision_split(
     </div>
     """
     st.markdown(f"#### {title}")
-    components.html(html, height=170, scrolling=False)
+    st.markdown(html, unsafe_allow_html=True)
 
 
 def render_heat_grid(
@@ -392,7 +391,7 @@ def render_heat_grid(
     </div>
     """
     st.markdown(f"#### {title}")
-    components.html(html, height=max(260, 120 + len(pivot.index) * 46), scrolling=False)
+    st.markdown(html, unsafe_allow_html=True)
 
 
 def render_sourcing_matrix(
@@ -467,7 +466,7 @@ def render_sourcing_matrix(
     <div class="sp2i-sourcing-wrap">{''.join(rows_html)}</div>
     """
     st.markdown(f"#### {title}")
-    components.html(html, height=max(320, 72 + len(chart_dataframe.index) * 54), scrolling=False)
+    st.markdown(html, unsafe_allow_html=True)
 
 
 def render_signed_bars(
@@ -586,7 +585,7 @@ def render_signed_bars(
     <div class="sp2i-signed-wrap">{''.join(rows_html)}</div>
     """
     st.markdown(f"#### {title}")
-    components.html(html, height=max(320, 72 + len(chart_dataframe.index) * 54), scrolling=False)
+    st.markdown(html, unsafe_allow_html=True)
 
 
 def _build_option_index(options: list[dict], selected_value) -> int:
