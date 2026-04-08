@@ -4,6 +4,8 @@ Composants visuels reutilisables pour Streamlit.
 
 from __future__ import annotations
 
+import textwrap
+
 import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
@@ -143,7 +145,8 @@ def render_proportional_bars(
         )
 
     st.markdown(f"#### {title}")
-    html = f"""
+    html = textwrap.dedent(
+        f"""
         <style>
         .sp2i-bar-wrap {{
             display: flex;
@@ -193,7 +196,8 @@ def render_proportional_bars(
         <div class="sp2i-bar-wrap">
             {''.join(rows_html)}
         </div>
-    """
+        """
+    )
     st.markdown(html, unsafe_allow_html=True)
 
 
@@ -245,7 +249,8 @@ def render_decision_split(
             """
         )
 
-    html = f"""
+    html = textwrap.dedent(
+        f"""
     <style>
     .sp2i-split-wrap {{
         display:flex;
@@ -304,7 +309,8 @@ def render_decision_split(
             {''.join(legend_html)}
         </div>
     </div>
-    """
+        """
+    )
     st.markdown(f"#### {title}")
     st.markdown(html, unsafe_allow_html=True)
 
@@ -357,7 +363,8 @@ def render_heat_grid(
             f"<tr><th>{row_label}</th>{''.join(cells)}</tr>"
         )
 
-    html = f"""
+    html = textwrap.dedent(
+        f"""
     <style>
     .sp2i-grid-wrap {{ overflow-x:auto; margin-top:0.5rem; }}
     .sp2i-grid {{
@@ -389,7 +396,8 @@ def render_heat_grid(
             <tbody>{''.join(body_rows)}</tbody>
         </table>
     </div>
-    """
+        """
+    )
     st.markdown(f"#### {title}")
     st.markdown(html, unsafe_allow_html=True)
 
@@ -438,7 +446,8 @@ def render_sourcing_matrix(
             """
         )
 
-    html = f"""
+    html = textwrap.dedent(
+        f"""
     <style>
     .sp2i-sourcing-wrap {{ display:flex; flex-direction:column; gap:12px; margin-top:0.5rem; }}
     .sp2i-bar-row {{
@@ -464,7 +473,8 @@ def render_sourcing_matrix(
     .sp2i-bar-meta {{ color:#93c5fd; font-size:0.82rem; white-space:nowrap; }}
     </style>
     <div class="sp2i-sourcing-wrap">{''.join(rows_html)}</div>
-    """
+        """
+    )
     st.markdown(f"#### {title}")
     st.markdown(html, unsafe_allow_html=True)
 
@@ -516,7 +526,8 @@ def render_signed_bars(
             """
         )
 
-    html = f"""
+    html = textwrap.dedent(
+        f"""
     <style>
     .sp2i-signed-wrap {{
         display:flex;
@@ -583,7 +594,8 @@ def render_signed_bars(
     }}
     </style>
     <div class="sp2i-signed-wrap">{''.join(rows_html)}</div>
-    """
+        """
+    )
     st.markdown(f"#### {title}")
     st.markdown(html, unsafe_allow_html=True)
 
