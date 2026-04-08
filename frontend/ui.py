@@ -10,6 +10,7 @@ import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
 import streamlit as st
+import streamlit.components.v1 as components
 
 
 def _recommended_chart_height(dataframe: pd.DataFrame, horizontal: bool = False) -> int:
@@ -198,7 +199,7 @@ def render_proportional_bars(
         </div>
         """
     )
-    st.markdown(html, unsafe_allow_html=True)
+    components.html(html, height=max(320, 72 + len(chart_dataframe.index) * 54), scrolling=False)
 
 
 def render_decision_split(
@@ -312,7 +313,7 @@ def render_decision_split(
         """
     )
     st.markdown(f"#### {title}")
-    st.markdown(html, unsafe_allow_html=True)
+    components.html(html, height=170, scrolling=False)
 
 
 def render_heat_grid(
@@ -399,7 +400,7 @@ def render_heat_grid(
         """
     )
     st.markdown(f"#### {title}")
-    st.markdown(html, unsafe_allow_html=True)
+    components.html(html, height=max(260, 120 + len(pivot.index) * 46), scrolling=False)
 
 
 def render_sourcing_matrix(
@@ -476,7 +477,7 @@ def render_sourcing_matrix(
         """
     )
     st.markdown(f"#### {title}")
-    st.markdown(html, unsafe_allow_html=True)
+    components.html(html, height=max(320, 72 + len(chart_dataframe.index) * 54), scrolling=False)
 
 
 def render_signed_bars(
@@ -597,7 +598,7 @@ def render_signed_bars(
         """
     )
     st.markdown(f"#### {title}")
-    st.markdown(html, unsafe_allow_html=True)
+    components.html(html, height=max(320, 72 + len(chart_dataframe.index) * 54), scrolling=False)
 
 
 def _build_option_index(options: list[dict], selected_value) -> int:
