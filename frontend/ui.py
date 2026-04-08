@@ -193,13 +193,29 @@ def render_proportional_bars(
             right: 10px;
             color: #f8fafc;
         }}
+        @media (max-width: 640px) {{
+            .sp2i-bar-row {{
+                grid-template-columns: 1fr;
+                gap: 8px;
+                align-items: stretch;
+            }}
+            .sp2i-bar-label {{
+                font-size: 0.86rem;
+            }}
+            .sp2i-bar-track {{
+                height: 26px;
+            }}
+            .sp2i-bar-value {{
+                font-size: 0.74rem;
+            }}
+        }}
         </style>
         <div class="sp2i-bar-wrap">
             {''.join(rows_html)}
         </div>
         """
     )
-    components.html(html, height=max(320, 72 + len(chart_dataframe.index) * 54), scrolling=False)
+    components.html(html, height=max(360, 96 + len(chart_dataframe.index) * 68), scrolling=False)
 
 
 def render_decision_split(
@@ -301,6 +317,18 @@ def render_decision_split(
         color:#93c5fd;
         font-weight:600;
     }}
+    @media (max-width: 640px) {{
+        .sp2i-split-legend-row {{
+            grid-template-columns: 14px 1fr;
+            gap:8px;
+        }}
+        .sp2i-split-pct {{
+            grid-column: 2;
+        }}
+        .sp2i-split-val {{
+            grid-column: 2;
+        }}
+    }}
     </style>
     <div class="sp2i-split-wrap">
         <div class="sp2i-split-bar">
@@ -313,7 +341,7 @@ def render_decision_split(
         """
     )
     st.markdown(f"#### {title}")
-    components.html(html, height=170, scrolling=False)
+    components.html(html, height=220, scrolling=False)
 
 
 def render_heat_grid(
@@ -390,6 +418,17 @@ def render_heat_grid(
         min-width:92px;
         white-space:nowrap;
     }}
+    @media (max-width: 640px) {{
+        .sp2i-grid {{
+            font-size:0.76rem;
+            border-spacing:4px;
+        }}
+        .sp2i-grid th,
+        .sp2i-grid td {{
+            padding:8px 8px;
+            min-width:74px;
+        }}
+    }}
     </style>
     <div class="sp2i-grid-wrap">
         <table class="sp2i-grid">
@@ -400,7 +439,7 @@ def render_heat_grid(
         """
     )
     st.markdown(f"#### {title}")
-    components.html(html, height=max(260, 120 + len(pivot.index) * 46), scrolling=False)
+    components.html(html, height=max(320, 150 + len(pivot.index) * 54), scrolling=False)
 
 
 def render_sourcing_matrix(
@@ -472,12 +511,26 @@ def render_sourcing_matrix(
         color:#f8fafc; font-size:0.82rem; font-weight:600; white-space:nowrap;
     }}
     .sp2i-bar-meta {{ color:#93c5fd; font-size:0.82rem; white-space:nowrap; }}
+    @media (max-width: 640px) {{
+        .sp2i-bar-row {{
+            grid-template-columns: 1fr;
+            gap:8px;
+            align-items:stretch;
+        }}
+        .sp2i-bar-label {{
+            font-size:0.86rem;
+        }}
+        .sp2i-bar-meta {{
+            white-space:normal;
+            font-size:0.76rem;
+        }}
+    }}
     </style>
     <div class="sp2i-sourcing-wrap">{''.join(rows_html)}</div>
         """
     )
     st.markdown(f"#### {title}")
-    components.html(html, height=max(320, 72 + len(chart_dataframe.index) * 54), scrolling=False)
+    components.html(html, height=max(380, 104 + len(chart_dataframe.index) * 76), scrolling=False)
 
 
 def render_signed_bars(
@@ -593,12 +646,25 @@ def render_signed_bars(
     .sp2i-signed-value.negative {{
         left:10px;
     }}
+    @media (max-width: 640px) {{
+        .sp2i-signed-row {{
+            grid-template-columns: 1fr;
+            gap:8px;
+            align-items:stretch;
+        }}
+        .sp2i-signed-label {{
+            font-size:0.86rem;
+        }}
+        .sp2i-signed-value {{
+            font-size:0.74rem;
+        }}
+    }}
     </style>
     <div class="sp2i-signed-wrap">{''.join(rows_html)}</div>
         """
     )
     st.markdown(f"#### {title}")
-    components.html(html, height=max(320, 72 + len(chart_dataframe.index) * 54), scrolling=False)
+    components.html(html, height=max(380, 104 + len(chart_dataframe.index) * 76), scrolling=False)
 
 
 def _build_option_index(options: list[dict], selected_value) -> int:
